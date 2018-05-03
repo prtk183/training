@@ -7,12 +7,7 @@ public class Goods {
 	private int goodsQuantity;
 	private double goodsPrice;
 
-	/**
-	 * @param goodsId
-	 * @param goodsName
-	 * @param goodsQuantity
-	 * @param goodsPrice
-	 */
+	
 	public Goods(int goodsId, String goodsName, int goodsQuantity,
 			double goodsPrice) {
 		this.goodsId = goodsId;

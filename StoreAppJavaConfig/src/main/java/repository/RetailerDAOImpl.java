@@ -21,10 +21,6 @@ import model.Customer;
 import model.Goods;
 import model.Supplier;
 
-/**
- * @author trainee
- *
- */
 
 @Repository()
 @Qualifier("retailerDAO")
