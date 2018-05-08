@@ -30,7 +30,7 @@ import service.SupplierServiceImpl;
 
 @Configuration
 @ComponentScan("controller")
-@PropertySource("classpath:database.properties")
+@PropertySource("database.properties")
 public class AppConfig {
 
 	AppConfig()

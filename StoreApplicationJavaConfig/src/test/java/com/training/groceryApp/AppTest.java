@@ -23,19 +23,9 @@ public class AppTest {
 	CustomerDAOImpl testAddCustomer;
 	GoodsDAOImpl testGoods;
 
-	@Before
-	public void LoadXml() {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		// JdbcTemplate jdbcTemplate = (JdbcTemplate) context.getBean("dataSource");
-
-		DriverManagerDataSource ds = context.getBean("dataSource", DriverManagerDataSource.class);
-
-		JdbcTemplate jt = context.getBean("jdbcTemplate", JdbcTemplate.class);
-
-		testAddCustomer = context.getBean("cdao", CustomerDAOImpl.class);
-		testGoods = context.getBean("gdao", GoodsDAOImpl.class);
-
-	}
+/**
+ * 
+ * to validate retailer*/
 
 	@Test
 	public void checkForNull() {
@@ -47,6 +37,10 @@ public class AppTest {
 
 		assertNotEquals("Enter valid address", retailerAddress, retailer.getRetailerAddres());
 	}
+	
+	/*
+	 * validating customer
+	 * */
 	@Test
 	public void checkForNullCustomer() {
 
@@ -64,7 +58,9 @@ public class AppTest {
 	}
 
 	
-
+/*
+ * validating supplier
+ * */
 	@Test
 	public void checkForNullSupplier() {
 	
@@ -75,22 +71,14 @@ public class AppTest {
 	int orderId = 0;
 	double amount = 0;
 
-	Supplier supplier = new Supplier(1, "Jessica", "10th Street", 2, 1, 1990.00);
-	assertNotEquals("Enter valid id", supplierName, supplier.getSupplierId());
-	assertNotEquals("Enter valid name", supplierAddress, supplier.getSupplierName());
+	Supplier supplier = new Supplier(1, "Payla", "10th Street", 2, 1, 1990.00);
+	System.out.println(supplier.getSupplierName());
+	assertNotEquals("Enter valid name", supplierName, supplier.getSupplierName());
+	assertNotEquals("Enter valid address", supplierAddress, supplier.getSupplierAddress());
 	assertNotEquals("Enter valid quantity", quantityOrder, supplier.getQuantityOrder());
 	assertNotEquals("Enter valid Id", orderId, supplier.getOrderId());
 	assertNotEquals("Enter valid amount", amount, supplier.getAmount());
 }
-	/*
-	 * @Test public void InsertCustomerIntoDatabase() {
-	 * 
-	 * Customer customer = new Customer(3, "null", "nagpur", "cash");
-	 * 
-	 * int inserted = testAddCustomer.addCustomer(customer); if (inserted > 0) { int
-	 * i = 1; }
-	 * 
-	 * Assert.assertEquals(1, inserted); }
-	 */
+	
 
 }

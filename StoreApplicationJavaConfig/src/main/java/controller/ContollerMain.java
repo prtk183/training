@@ -33,8 +33,8 @@ public class ContollerMain {
 		
 		Customer c = new Customer(105,"john","NGP","debit card");
 		   
-		 int status=dao.addCustomer(c);  
-		    System.out.println(status); 
+		 //int status=dao.addCustomer(c);  
+		   // System.out.println(status); 
 	 
 		 /*
 	   int status1=dao.updateCustomer(103,"Robert"); 
@@ -98,7 +98,7 @@ public class ContollerMain {
 		 
 		
 		    
-		//RetailerService rdao =(RetailerService) context.getBean("retailerService");
+		RetailerService rdao =(RetailerService) context.getBean("retailerService");
 		
 		
 		
@@ -109,7 +109,7 @@ public class ContollerMain {
 		
 		
 		//rdao.viewCustomer(106);
-		//rdao.getAllGoods();
+		rdao.getAllGoods();
 		//rdao.viewSupplier(22);
 		
 

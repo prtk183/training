@@ -27,6 +27,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="D:/Users/trainee/Downloads/JavaTraining-Capg-master/SuperMarket/.settings"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

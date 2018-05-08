@@ -31,6 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 		//CustomerDAO customerDAO = null;
 		int removeData = customerDAO.removeCustomer(customerId);
+		System.out.println(removeData);
 		return removeData;
 	}
 

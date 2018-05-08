@@ -30,12 +30,12 @@ public class Supplier {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Supplier(int i, String string, String string2, int j, int k, double d) {
-		this.supplierId = supplierId;
-		this.supplierName = supplierName;
-		this.supplierAddress = supplierAddress;
-		this.quantityOrder = quantityOrder;
-		this.orderId = orderId;
+	public Supplier(int sid, String string, String string2, int quantity, int id, double amount) {
+		supplierId = sid;
+		supplierName = string;
+		supplierAddress = string2;
+		quantityOrder = quantity;
+		orderId = id;
 		this.amount = amount;
 	}
 

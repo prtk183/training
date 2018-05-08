@@ -31,12 +31,12 @@ public class Supplier {
 	}
 
 	public Supplier(int i, String string, String string2, int j, int k, double d) {
-		this.supplierId = supplierId;
-		this.supplierName = supplierName;
-		this.supplierAddress = supplierAddress;
-		this.quantityOrder = quantityOrder;
-		this.orderId = orderId;
-		this.amount = amount;
+		this.supplierId = i;
+		this.supplierName = string;
+		this.supplierAddress = string2;
+		this.quantityOrder = k;
+		this.orderId = k;
+		this.amount = d;
 	}
 
 	

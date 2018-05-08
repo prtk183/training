@@ -28,23 +28,23 @@ public class ContollerMain {
 
 
 		 CustomerService dao= context.getBean("cdao",service.CustomerServiceImpl.class);  
-		/*
+		
 		Customer c = new Customer(103,"Peter","YZK","debit card");
 		   
 		 int status=dao.addCustomer(c);  
-		    System.out.println(status); 
-	 */
+		   // System.out.println(status); 
+	 
 		 /*
 	   int status1=dao.updateCustomer(103,"Robert"); 
 	    System.out.println(status1); 
 		     
 	  */
-		 /*
-		    int status2=dao.removeCustomer(103); 
+		 
+		  //  int status2=dao.removeCustomer(103); 
 		
-		    System.out.println(status2); 
+		    //System.out.println("rm"+status2); 
 		
-		*/
+		
 		
 		 GoodsService gdao = (GoodsService) context.getBean("gdao");		
 		
@@ -106,9 +106,9 @@ public class ContollerMain {
 		 
 		
 		
-		rdao.viewCustomer(106);
-		rdao.getAllGoods();
-		rdao.viewSupplier(22);
+		//rdao.viewCustomer(106);
+		//rdao.getAllGoods();
+		//rdao.viewSupplier(22);
 		
 
 	}
