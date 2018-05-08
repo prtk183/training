@@ -29,7 +29,7 @@ import service.SupplierService;
 import service.SupplierServiceImpl;
 
 @Configuration
-@ComponentScan("controller")
+@ComponentScan(basePackages= {"controller","service", "model", "repository"})
 @PropertySource("database.properties")
 public class AppConfig {
 

@@ -44,7 +44,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 	/*@Override
 	public int viewGoods() {
 		// TODO Auto-generated method stub
-		String query = "select * from goods";
+		String query = "select * from good";
 		System.out.println(query);
 		return jdbcTemplate.update(query);
 
@@ -52,7 +52,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 
 	
 	public List<Goods> viewGoods(){  
-		 return jdbcTemplate.query("select * from goods",new ResultSetExtractor<List<Goods>>(){  
+		 return jdbcTemplate.query("select * from good",new ResultSetExtractor<List<Goods>>(){  
 		    @Override  
 		     public List<Goods> extractData(ResultSet rs) throws SQLException,  
 		            DataAccessException {  
@@ -264,9 +264,10 @@ public class RetailerDAOImpl implements RetailerDAO {
 				        while(rs.next()){  
 
 				        	Retailer r = new Retailer();
-				        	r.setRetailerId(rs.getInt(1));
+				        	
 				        	r.setRetailerName(rs.getString(2));
 				        	r.setRetailerAddres(rs.getString(3));
+				        	r.setRetailerId(rs.getInt(1));
 				 
 				        	list.add(r); 
 				       

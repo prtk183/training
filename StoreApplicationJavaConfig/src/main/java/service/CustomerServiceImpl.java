@@ -71,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public int addCustomer(Customer customer) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("in custo service");
 		int adcustomer = customerDAO.addCustomer(customer);
 		return adcustomer;
 	}

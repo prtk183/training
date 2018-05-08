@@ -51,7 +51,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 
 	
 	public List<Goods> viewGoods(){  
-		 return jdbcTemplate.query("select * from goods",new ResultSetExtractor<List<Goods>>(){  
+		 return jdbcTemplate.query("select * from good",new ResultSetExtractor<List<Goods>>(){  
 		    @Override  
 		     public List<Goods> extractData(ResultSet rs) throws SQLException,  
 		            DataAccessException {  

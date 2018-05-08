@@ -41,7 +41,7 @@ public class RetailersView extends HttpServlet {
 		
 		ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		
-		RetailerService cdao = (RetailerService) context.getBean("retailerService");
+		//RetailerService cdao = (RetailerService) context.getBean("retailerService");
 		
 		List<Retailer> goodz = new ArrayList<Retailer>();
 		

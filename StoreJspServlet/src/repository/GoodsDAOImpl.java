@@ -48,7 +48,7 @@ public class GoodsDAOImpl implements GoodsDAO {
 	public int addGoods(int goodsId, String goodsName, int goodsQuantity,
 			double goodsPrice) 
 	{
-		String query = "insert into goods values(" +goodsId+","+ "'"+goodsName +"'"+","+goodsQuantity+","+ goodsPrice +")";
+		String query = "insert into good values(" +goodsId+","+ "'"+goodsName +"'"+","+goodsQuantity+","+ goodsPrice +")";
 		System.out.println(query);
 		
 		return jdbcTemplate.update(query);
@@ -58,7 +58,7 @@ public class GoodsDAOImpl implements GoodsDAO {
 
 	@Override
 	public int updateGoods(int goodsId, String goodsName) {
-		String query = "update goods set goodsName=" + "'" + goodsName + "'" + " where goodsId=" + goodsId;
+		String query = "update good set goodsName=" + "'" + goodsName + "'" + " where goodsId=" + goodsId;
 		// String query = "update customer set customerName="+name+" where customerId="+
 		// customerID;
 
@@ -69,7 +69,7 @@ public class GoodsDAOImpl implements GoodsDAO {
 	@Override
 	public int removeGoods(int goodsId) {
 		
-		String query = "delete from goods where goodsId="+goodsId;
+		String query = "delete from good where goodsId="+goodsId;
 		System.out.println(query);
 		return jdbcTemplate.update(query);
 	}

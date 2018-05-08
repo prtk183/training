@@ -33,9 +33,9 @@
 <h3>Data Table</h3>
 <table>
 <tr> 
-    <th>customerId</th>
-    <th>customerName</th> 
-    <th>CustomerAddress</th>
+    <th>reatilerId</th>
+    <th>retailerName</th> 
+    <th>retailerAddress</th>
 </tr>
 <c:forEach var="cot" items="${retailerslist}"> 
 

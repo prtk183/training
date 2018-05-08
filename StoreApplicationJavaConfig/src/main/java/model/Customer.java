@@ -67,4 +67,10 @@ public class Customer {
 		this.paymentMode = paymentMode;
 	}
 
+	@Override
+	public String toString() {
+		return "Customer [customerId=" + customerId + ", customerName=" + customerName + ", customerAddress="
+				+ customerAddress + ", paymentMode=" + paymentMode + "]";
+	}
+
 }
