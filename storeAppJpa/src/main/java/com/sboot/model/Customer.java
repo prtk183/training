@@ -16,19 +16,23 @@ public class Customer {
 	String customerAddress;
 	String paymentMode;
 	
+	Boolean operation;
 	
 	
+	
+
 	Customer()
 	{
 		
 	}
 	
-	public Customer(Integer  id, String name, String address, String payMode)
+	public Customer(Integer  id, String name, String address, String payMode, Boolean oper)
 	{
 		customerId=id;
 		customerName=name;
 		customerAddress=address;
 		paymentMode=payMode;
+		operation=oper;
 	}
 	
 	public Integer  getCustomerId() {
@@ -56,5 +60,11 @@ public class Customer {
 		this.paymentMode = paymentMode;
 	}
 	
-	
+	public Boolean getOperation() {
+		return operation;
+	}
+
+	public void setOperation(Boolean operation) {
+		this.operation = operation;
+	}
 }

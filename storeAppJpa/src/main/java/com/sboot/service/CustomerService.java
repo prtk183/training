@@ -8,10 +8,10 @@ public interface CustomerService {
 
 	public List<Customer> viewAllCustomer();
 	
-	public String addCustomer(Customer cust);
+	public String addCustomers(List<Customer> cust);
 	
-	public void removeCustomer(int cid);
+	public String removeCustomers(List<Integer> removeid);
 	
-	public void updateCustomer(Customer cust);
+	public String updateCustomers(List<Customer> cust);
 	
 }

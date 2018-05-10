@@ -1,5 +1,6 @@
 package com.sboot.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.coyote.Response;
@@ -42,12 +43,17 @@ public class CustomerController {
 	 * to add customer
 	 *  */
 	@PostMapping("/addcustomer")
-	public ResponseEntity<List<Customer>> addCustomer(@RequestBody Customer customer) {
-             String message="";  
-          
-            message = csi.addCustomer(customer);
+	public ResponseEntity<String> addCustomer(@RequestBody List<Customer> customer) {
+		String addresult="";
+          	
+		Response response = new Response();
+          	
+		
+             addresult = csi.addCustomers(customer);
              
-             return new ResponseEntity<String>(message, HttpStatus.CREATED);
+            return new ResponseEntity<String>(addresult, HttpStatus.CONFLICT);
+  
+             
                 
 	}
 
@@ -57,9 +63,10 @@ public class CustomerController {
 	 * 
 	 * */
 	@PutMapping("updatecustomer")
-	public ResponseEntity<Customer> updateCustomer (@RequestBody Customer customer) {
-		csi.updateCustomer(customer);
-		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+	public ResponseEntity<String> updateCustomer (@RequestBody List<Customer> customer) {
+		String str;
+		str=csi.updateCustomers(customer);
+		return new ResponseEntity<String>(str, HttpStatus.OK);
 	}
 	
 	/*
@@ -67,8 +74,9 @@ public class CustomerController {
 	 * 
 	 * */
 	@DeleteMapping("deletecustomer/{id}")
-	public ResponseEntity<Void> deleteCustomer (@PathVariable("id") Integer id) {
-		csi.removeCustomer(id);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+	public ResponseEntity<String> deleteCustomer (@PathVariable("id") List<Integer> id) {
+		String str;
+		str=csi.removeCustomers(id);
+		return new ResponseEntity<String>(str, HttpStatus.OK);
 	}	
 }
