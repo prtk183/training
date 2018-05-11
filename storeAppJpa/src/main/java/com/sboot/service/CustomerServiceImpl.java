@@ -38,48 +38,87 @@ public class CustomerServiceImpl implements CustomerService {
 	public String addCustomers(List<Customer> customer) {
 		// TODO Auto-generated method stub
 		String string = "";
+		String checknull="";
+		String checkid="";
+		String added="";
 		Optional<Customer> id = null;
 
 		List<Customer> failedAddCustomers = new ArrayList<Customer>();
 
-		for (Customer c : customer) {
-			try {
-				id = crepo.findById(c.getCustomerId());
+try
+{
+		
+for (Customer c : customer) {
+	
+	try {
+				
+		id = crepo.findById(c.getCustomerId());
+		if (id.isPresent()) 
+			{
 
-				if (id.isPresent() && c.getCustomerId() != null && c.getCustomerAddress() != null
-						&& c.getCustomerName() != null && c.getOperation() != null) {
-
-					c.setOperation(false);
-					failedAddCustomers.add(c);
-
-				} else {
-					try {
-						c.setOperation(true);
-						crepo.save(c);
-					} catch (Exception e) {
-						string = e.getMessage();
-					}
-				}
-
-			} catch (Exception e) {
-				string = e.getMessage();
+				c.setOperation(false);
+				failedAddCustomers.add(c);
+				checkid="customer exists";
+			} 
+		else
+			{
+				try {
+						if (c.getCustomerId() != null && c.getCustomerAddress() != null
+								&& c.getCustomerName() != null && c.getOperation() != null && c.getPaymentMode()!=null)
+							{
+								c.setOperation(true);
+								crepo.save(c);
+								added="added succesfully";
+							}
+					 
+						else
+							{
+								c.setOperation(false);
+								failedAddCustomers.add(c);
+								checknull = " Data can not be null";
+					
+							}
+						
+					} 
+				catch (Exception e) {
+				string += e.getMessage()+"\n"+checkid+"\n"+checknull+"\n"+added; 	//printing data not null error message
 			}
-
 		}
+	}catch(Exception e)
+		{
+			string += e.getMessage()+"\n"+checkid+"\n"+checknull+"\n"+added;		////printing exixting customers message
+		}
+}
+string +="\n"+checkid+"\n"+checknull+"\n"+added;		////printing exixting customers message
 
-		if (failedAddCustomers.isEmpty()) {
-			string = "Customers added succesfully!";
-		} else {
-			int size = failedAddCustomers.size();
-			int fac[] = new int[size];
-			int i = 0;
-			for (Customer x : failedAddCustomers) {
+}
+catch(Exception e)
+{
+	string += e.getMessage()+"\n"+checkid+"\n"+checknull+"\n"+added;				//printing if failed to add customers
+}
+finally
+		{
+			
+			if (failedAddCustomers.isEmpty()) 
+			{
+			
+				string += "\n";
+			} 
+			else
+			{
+				int size = failedAddCustomers.size();
+				int fac[] = new int[size];
+				int i = 0;
+				for (Customer x : failedAddCustomers) {
 				fac[i] = x.getCustomerId();
 				i++;
 			}
+			
 			String facstr = Arrays.toString(fac);
-			string = facstr + " Customers can not be added!";
+			string += "\n"+facstr + " Customers can not be added!\n";			//printing message with id of customer which can not be added
+			}
 		}
+
 
 		return string;
 
@@ -90,52 +129,75 @@ public class CustomerServiceImpl implements CustomerService {
 	 * 
 	 */
 	@Override
-	public String removeCustomers(List<Integer> id) {
+	public String removeCustomers(List<Integer> removelist) {
 		// TODO Auto-generated method stub
 
 		// crepo.deleteById(cid);
-
 		String string = "";
+		String checkid="";
+		String removed="";
+		String undelted="";
+		
 		List<Integer> failedRemoveCustomers = new ArrayList<Integer>();
-		int count = id.size();
+		
+		int count = removelist.size();
 
 		Iterable<Customer> customerlist = new ArrayList<Customer>();
 
 		customerlist = crepo.findAll();
+		
 		int t = 0;
-		for (Integer c : id) {
-			for (Customer cu : customerlist) {
-				if (c == cu.getCustomerId()) {
-					try {
-						crepo.deleteById(c);
-					} catch (Exception e) {
-						string = e.getMessage();
+		
+		try
+		{
+			for (Integer c : removelist) {
+				for (Customer cu : customerlist) {
+				if (c == cu.getCustomerId()) 
+				{
+					
+							crepo.deleteById(c);
+							removed ="deleted succesfully";
+							break;
 					}
-
+				else
+				 {
+					t++;
+				
+				 }
 				}
-				t++;
-
-				if (t == count) {
+				if(t==count)
+				{
 					failedRemoveCustomers.add(c);
+					checkid="id does not exists";
+					string += "\n"+checkid;
 				}
 			}
+		
+			//string += removed+"\n"+checkid;			
+		}
+		catch(Exception e)
+		{
+			string +=e.getMessage()+checkid;		//if id did not found
 		}
 
-		if (failedRemoveCustomers.isEmpty()) {
-			string = " Customers removed succesfully!";
-		} else {
-			int size = failedRemoveCustomers.size();
-			int fac[] = new int[size];
-			int i = 0;
-			for (Integer x : failedRemoveCustomers) {
-				fac[i] = x;
-				i++;
-			}
+		finally
+		{
+			if (failedRemoveCustomers.isEmpty()) {
+				removed = " Customers removed succesfully!";
+			} else {
+				int size = failedRemoveCustomers.size();
+				int fac[] = new int[size];
+				int i = 0;
+				for (Integer x : failedRemoveCustomers) {
+					fac[i] = x;
+					i++;
+				}
 			String facstr = Arrays.toString(fac);
-			string = " failed to remove Customers!" + facstr;
+			undelted = " failed to remove Customers!" + facstr;
+			}
 		}
-
-		return string;
+		
+		return string+"\n"+removed+"\n"+undelted;
 
 	}
 
@@ -144,47 +206,89 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 
 		String string = "";
+		String checknull="";
+		String checkid="";
+		String added="";
+		Optional<Customer> id = null;
 
 		List<Customer> failedUpdateCustomers = new ArrayList<Customer>();
 
-		for (Customer c : customer) {
-			try
+try
+{
+		
+for (Customer c : customer) {
+	
+	try {
+				
+		id = crepo.findById(c.getCustomerId());
+		if (id.isPresent()) 
 			{
-			Optional<Customer> id = crepo.findById(c.getCustomerId());
-
-			if (id.isPresent() && c.getCustomerId() != null && c.getCustomerAddress() != null
-					&& c.getCustomerName() != null && c.getOperation() != null) {
 
 				c.setOperation(false);
 				failedUpdateCustomers.add(c);
-
-			} else {
-				c.setOperation(true);
-				crepo.save(c);
-			}
-			}
-			catch(Exception e)
+				checkid="customer exists";
+			} 
+		else
 			{
-				string=e.getMessage();
+				try {
+						if (c.getCustomerId() != null && c.getCustomerAddress() != null
+								&& c.getCustomerName() != null && c.getOperation() != null && c.getPaymentMode()!=null)
+							{
+								c.setOperation(true);
+								crepo.save(c);
+								added="updtaed succesfully";
+							}
+					 
+						else
+							{
+								c.setOperation(false);
+								failedUpdateCustomers.add(c);
+								checknull = " Data can not be null";
+					
+							}
+						
+					} 
+				catch (Exception e) {
+				string += e.getMessage()+"\n"+checkid+"\n"+checknull+"\n"+added; 	//printing data not null error message
 			}
 		}
+	}catch(Exception e)
+		{
+			string += e.getMessage()+"\n"+checkid+"\n"+checknull+"\n"+added;		////printing exixting customers message
+		}
+}
+string +="\n"+checkid+"\n"+checknull+"\n"+added;		////printing exixting customers message
 
-		if (failedUpdateCustomers.isEmpty()) {
-			string = "Customers updated succesfully!";
-		} else {
-			int size = failedUpdateCustomers.size();
-			int fac[] = new int[size];
-			int i = 0;
-			for (Customer x : failedUpdateCustomers) {
+}
+catch(Exception e)
+{
+	string += e.getMessage()+"\n"+checkid+"\n"+checknull+"\n"+added;				//printing if failed to updateed customers
+}
+finally
+		{
+			
+			if (failedUpdateCustomers.isEmpty()) 
+			{
+			
+				string += "\n";
+			} 
+			else
+			{
+				int size = failedUpdateCustomers.size();
+				int fac[] = new int[size];
+				int i = 0;
+				for (Customer x : failedUpdateCustomers) {
 				fac[i] = x.getCustomerId();
 				i++;
 			}
+			
 			String facstr = Arrays.toString(fac);
-			string = facstr + " Customers can not be updated!";
+			string += "\n"+facstr + " Customers can not be added!\n";			//printing message with id of customer which can not be added
+			}
 		}
+
 
 		return string;
 
 	}
-
 }
