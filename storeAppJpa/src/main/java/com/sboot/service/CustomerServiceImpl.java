@@ -2,6 +2,7 @@ package com.sboot.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -201,6 +202,15 @@ finally
 
 	}
 
+	
+	
+/*
+ * 
+ * 
+ * 
+ * 
+ * 
+ * */
 	@Override
 	public String updateCustomers(List<Customer> customer) {
 		// TODO Auto-generated method stub
@@ -223,13 +233,8 @@ for (Customer c : customer) {
 		id = crepo.findById(c.getCustomerId());
 		if (id.isPresent()) 
 			{
-
-				c.setOperation(false);
-				failedUpdateCustomers.add(c);
-				checkid="customer exists";
-			} 
-		else
-			{
+		
+			
 				try {
 						if (c.getCustomerId() != null && c.getCustomerAddress() != null
 								&& c.getCustomerName() != null && c.getOperation() != null && c.getPaymentMode()!=null)
@@ -251,6 +256,18 @@ for (Customer c : customer) {
 				catch (Exception e) {
 				string += e.getMessage()+"\n"+checkid+"\n"+checknull+"\n"+added; 	//printing data not null error message
 			}
+		
+			} 
+		else
+			{
+
+
+			c.setOperation(false);
+			failedUpdateCustomers.add(c);
+			checkid="customer does not exists";
+		
+			
+		
 		}
 	}catch(Exception e)
 		{
@@ -283,7 +300,7 @@ finally
 			}
 			
 			String facstr = Arrays.toString(fac);
-			string += "\n"+facstr + " Customers can not be added!\n";			//printing message with id of customer which can not be added
+			string += "\n"+facstr + " Customers can not be updated!\n";			//printing message with id of customer which can not be updated
 			}
 		}
 
@@ -291,4 +308,68 @@ finally
 		return string;
 
 	}
+
+/*
+ * 
+ * find by id, view list of specific customer
+ * 
+ * 
+ * */
+public List<Customer> viewcustomerbyid(List<Integer> viewlist)
+{
+	String string="";
+	
+	Optional op;
+	Object ob;
+	boolean check;
+
+	List<Optional> sendfoundcustomers=null;
+	List<Optional> sendnotfoundcustomers=null;
+
+	List<Integer> foundcustomers=null;
+	List<Integer> notfoundcustomers=null;
+
+	
+	for(Integer i : viewlist)
+	{
+		check=crepo.existsById(i);
+		
+		if(check==true)
+		{
+			
+			foundcustomers.add(i);
+			
+		}
+		else
+		{
+			notfoundcustomers.add(i);
+		}
+	}
+	
+	 for(Integer k : foundcustomers)
+	 {
+		 sendfoundcustomers.add(crepo.findById(k));
+	 }
+	 
+	 
+	 for(Integer l : notfoundcustomers)
+	 {
+		 sendnotfoundcustomers.add(crepo.findById(l));
+	 }
+	
+	 List<Customer> sendlist=null;
+	 
+	 for(Optional t : sendfoundcustomers)
+	 {
+		 sendlist.addAll((Collection<? extends Customer>) crepo.findAllById(foundcustomers));
+	 }
+	 
+	return sendlist;
 }
+
+
+}
+
+
+
+

@@ -38,7 +38,18 @@ public class CustomerController {
 		return new ResponseEntity<List<Customer>>(list, HttpStatus.OK);
 	}
 	
-
+/*
+ * 
+ * */
+	@GetMapping("/viewbyid/{viewlist}")
+	public ResponseEntity<List<Customer>> viewById(@PathVariable List<Integer> viewlist)
+	{
+		List<Customer> list = (List<Customer>) csi.viewcustomerbyid(viewlist);
+		
+		return  new ResponseEntity<List<Customer>>(list, HttpStatus.OK);
+		
+		
+	}
 	/*
 	 * to add customer
 	 *  */
