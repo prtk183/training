@@ -85,6 +85,24 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		  return custlist;
 	}
+
+
+
+  @Override
+  public Customer getCustomer(Long customerId) throws HandleException {
+    
+    Optional op;
+    Customer customer=null;
+    
+    op= customerRepository.findById(customerId);
+    if(op.isPresent())
+    {
+        customer = customerRepository.findById(customerId).get();
+    }
+    
+    
+    return customer;
+  }
 		
 
 }

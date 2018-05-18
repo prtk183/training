@@ -19,6 +19,9 @@ public interface AccountService {
   
   
   public List<Account> getAccountDetails() throws HandleException;
+  
+  
+  public Account getAccountDetail(Long Id) throws HandleException;
  
 
 }

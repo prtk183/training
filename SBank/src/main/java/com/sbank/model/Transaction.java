@@ -2,6 +2,7 @@ package com.sbank.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -10,7 +11,14 @@ import javax.persistence.ManyToOne;
 public class Transaction {
   
   @Id
-  private Long transcationId;
+  @Column(name = "transacId", nullable = false, updatable = false)
+  private Long transactionId;
+  public Long getTransactionId() {
+    return transactionId;
+  }
+  public void setTransactionId(Long transactionId) {
+    this.transactionId = transactionId;
+  }
   @ManyToOne(targetEntity=Customer.class)
   private Customer customer;
   @ManyToOne(targetEntity=Account.class)

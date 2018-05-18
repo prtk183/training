@@ -44,12 +44,8 @@ public class CustomerController {
   @PostMapping(path = "/createcustomer", consumes = "application/json", produces = "application/json")
   public ResponseEntity<Customer> addOneCustomer(@RequestBody WrapperClass wrapperClass) throws HandleException {
 
-    BigDecimal id = wrapperClass.bankId;
-
-    Bank b = bankrepository.findById(id).get();
-    Optional op =  bankrepository.findById(id);
-   
-
+ 
+    Bank b = bankrepository.findById(wrapperClass.bankId).get();
     Customer cust = wrapperClass.customer;
     cust.setBankId(b);
     Customer result = customerServiceImpl.createCustomer(cust);

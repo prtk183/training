@@ -43,7 +43,8 @@ public class AccountServiceImpl implements AccountService {
 
       account.setAmount(object.getAmount());
 
-      if (op1.isPresent() && op2.isPresent()) {   //tracing bank and account whether it exist or else throw error
+      if (op1.isPresent() && op2.isPresent())
+      {   //tracing bank and account whether it exist or else throw error
         Customer cust = customerRepository.findById(object.getCustomerId()).get(); 
                                                                                 
 
@@ -200,6 +201,21 @@ public class AccountServiceImpl implements AccountService {
 
     return act;
 
+  }
+
+  @Override
+  public Account getAccountDetail(Long Id) throws HandleException  {
+
+    Optional op;
+    Account account=null;
+    op = accountRepository.findById(Id);
+    if(op.isPresent())
+    {
+       account = accountRepository.findById(Id).get();
+   
+    }
+    return account;
+    
   }
 
 }

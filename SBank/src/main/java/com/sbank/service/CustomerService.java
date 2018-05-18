@@ -20,4 +20,5 @@ public interface CustomerService {
 	
 	List<Customer> getCustomerdetails() throws HandleException;
 	
+	Customer getCustomer(Long customerId) throws HandleException;
 }
