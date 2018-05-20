@@ -7,10 +7,10 @@ import com.sbank.model.Customer;
 
 public class CreateAccountWrapper {
   
-  public BigDecimal getBankId() {
+  public Long getBankId() {
     return bankId;
   }
-  public void setBankId(BigDecimal bankId) {
+  public void setBankId(Long bankId) {
     this.bankId = bankId;
   }
   @Override
@@ -30,7 +30,7 @@ public class CreateAccountWrapper {
   public void setAmount(BigDecimal amount) {
     this.amount = amount;
   }
-  private BigDecimal bankId;
+  private Long bankId;
   private Long customerId;
   private BigDecimal amount;
 

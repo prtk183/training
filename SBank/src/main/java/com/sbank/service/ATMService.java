@@ -10,9 +10,34 @@ import com.sbank.wrappers.WrapperATMWithdraw;
 @Service
 public interface ATMService {
 
+  /**/
+  /**
+   * @param object
+   * @return
+   * @throws HandleException
+   */
   public ATM createATM(WrapperATMCreate object) throws HandleException;
   
+  /**/
+  /**
+   * @param object
+   * @return
+   * @throws HandleException
+   */
   public ATM addMoneyFromBank(WrapperATMAddMoneyToATM object) throws HandleException;
   
+  /**/
+  /**
+   * @param object
+   * @return
+   * @throws HandleException
+   */
   public ATM withdrawMoney(WrapperATMWithdraw object) throws HandleException;
+  
+  /**/
+  /**
+   * @param atmId
+   * @return
+   */
+  public ATM getAtm(Long atmId) throws HandleException;
 }

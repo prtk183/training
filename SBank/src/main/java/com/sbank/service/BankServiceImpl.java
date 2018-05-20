@@ -17,7 +17,7 @@ import com.sbank.exception.HandleException;
 import com.sbank.model.Bank;
 
 /**
- * @author trainee
+ * @author PrateekG
  *
  */
 @Service
@@ -28,6 +28,10 @@ public class BankServiceImpl  implements BankService {
 	@Autowired
 	BankRepository bankrepository;
 	
+	/**/
+	/* creating bank with amount which is in parameter
+	 * @see com.sbank.service.BankService#createBank(com.sbank.model.Bank)
+	 */
 	@Override
 	public Bank createBank(Bank bank) throws HandleException {
 	  
@@ -45,6 +49,10 @@ public class BankServiceImpl  implements BankService {
 	  }
 	}
 
+	/**/
+	/* get all banks in form of list
+	 * @see com.sbank.service.BankService#getBankDetails()
+	 */
 	@Override
 	public List<Bank> getBankDetails() throws HandleException{
 	
@@ -61,8 +69,12 @@ public class BankServiceImpl  implements BankService {
 	
 	}
 
+	/**/
+  /* get the bank having particular bankid 
+   * @see com.sbank.service.BankService#getBank(java.math.BigDecimal)
+   */
   @Override
-  public Bank getBank(BigDecimal bankId) throws HandleException {
+  public Bank getBank(Long bankId) throws HandleException {
 
     Optional op;
     Bank bank=null;
@@ -70,11 +82,25 @@ public class BankServiceImpl  implements BankService {
     
     if(op.isPresent())
     {
-      bank = bankrepository.findById(bankId).get();
-      
+      bank = bankrepository.findById(bankId).get(); 
     }
-    
     return bank;
+  }
+
+  /**/
+  /* update banks data
+   * @see com.sbank.service.BankService#updateBank(com.sbank.model.Bank)
+   */
+  @Override
+  public void updateBank(Bank bank) throws HandleException {
+    // TODO Auto-generated method stub
+
+    Optional op;
+    op = bankrepository.findById(bank.getBankId());
+    if(op.isPresent())
+    {
+      bankrepository.saveAndFlush(bank); 
+    }
   }
 
 	

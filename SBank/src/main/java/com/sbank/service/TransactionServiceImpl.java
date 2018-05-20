@@ -24,64 +24,69 @@ public class TransactionServiceImpl implements TransactionService{
   @Autowired
   private TransactionRepository transactionRepository;
   
+  /**/
+  /* create transaction
+   * @see com.sbank.service.TransactionService#createTransaction(com.sbank.wrappers.WrapperTransaction)
+   */
   @Override
   public Transaction createTransaction(WrapperTransaction obj) throws HandleException {
     
-  try
-  {
-    Transaction tax=null;
-    Customer customer = null;
-    Account account = null;
-    
-    try {
-      account = accountServiceImpl.getAccountDetail(obj.getAccount());
-    } catch (HandleException e) {
-
-   throw new HandleException("account not found");
-    }
-    
-    try {
-      customer = customerServiceImpl.getCustomer(obj.getCustomerId());
-    } catch (HandleException e) {
-    
-      throw new HandleException("customer not found");
-    }
-    
-    String ttype= obj.getTtype();
-    
-    tax.setAccount(account);
-    tax.setCustomer(customer);
-    tax.setTransactionType(ttype);
-    tax.setAmount(obj.getAmount());
-    
-    tax=transactionRepository.save(tax);
-    return tax;
-  }
-  catch(HandleException f)
-  {
-    throw new HandleException("transaction failed to create");
-  }
+    if(accountServiceImpl.getAccountDetail(obj.getAccount()).getAccountId().equals(obj.getAccount())) //validating account
+    {
+         Account account  = accountServiceImpl.getAccountDetail(obj.getAccount());
+         
+           if(customerServiceImpl.getCustomer(obj.getCustomerId()).getCustomerId().equals(obj.getCustomerId()))   //validating customer
+           {
+             Customer customer = customerServiceImpl.getCustomer(obj.getCustomerId());
+             
+             String ttype= obj.getTtype();
+             Transaction tax= new Transaction();
+            tax.setTransactionId(account.getAccountId());
+             tax.setAccount(account);     
+             tax.setCustomer(customer);
+             tax.setTransactionType(ttype);
+             tax.setAmount(obj.getAmount());
+             
+             tax=transactionRepository.save(tax); //saving 
+             return tax;
    
+           } else {
+        
+             throw new HandleException("customer not found");
+           }
+    }  else {
+      throw new HandleException("account not found");
+    }
   }
 
+  /**/
+  /* generating report for an id
+   * @see com.sbank.service.TransactionService#generteTransactionReport(com.sbank.wrappers.WrapperTransaction)
+   */
   @Override
-  public List<Transaction> generteTransactionReport(WrapperTransaction obj) {
+  public List<Transaction> generteTransactionReport(WrapperTransaction obj) throws HandleException {
  
     List<Transaction> TransactionList  = transactionRepository.findAll();
     
-    List<Long> listforId=null;
+    List<Transaction> TransactionReportForById=null;
     
     for(Transaction ts: TransactionList)
     {
-      if(ts.getAccount().getAccountId().equals(obj.getAccount()))
+      if(ts.getAccount().getAccountId().equals(obj.getAccount()))     //fetching transaction record for an account id
       {
-        listforId.add(ts.getTransactionId());
-        TransactionList.add(ts.getTransactionId())
+        TransactionReportForById.add(transactionRepository.findById(ts.getTransactionId()).get());
+        
+        
       }
     }
-    
-    
-    return null;
+    if(TransactionReportForById.isEmpty())
+    {
+      throw new HandleException("no record found");
+    }
+    else
+    {
+       return TransactionReportForById;
+    }
   }
 
 }

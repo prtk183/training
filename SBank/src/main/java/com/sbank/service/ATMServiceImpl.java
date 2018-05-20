@@ -12,130 +12,151 @@ import com.sbank.dao.BankRepository;
 import com.sbank.exception.HandleException;
 import com.sbank.model.ATM;
 import com.sbank.model.Account;
+import com.sbank.model.Atm_Denomination;
 import com.sbank.model.Bank;
 import com.sbank.wrappers.WrapperATMAddMoneyToATM;
 import com.sbank.wrappers.WrapperATMCreate;
 import com.sbank.wrappers.WrapperATMWithdraw;
 
+/**
+ * @author hp
+ *
+ */
 @Service
-public class ATMServiceImpl implements ATMService{
+public class ATMServiceImpl implements ATMService {
 
   @Autowired
-  BankRepository bankrepository;
+  BankServiceImpl bankServiceImpl;
   @Autowired
   ATMRepository atmrepository;
   @Autowired
-  AccountRepository accountrepository;
+  AccountServiceImpl accountServiceImpl;
   
+  @Autowired
+  AtmDenominationImpl atmDenominationImpl;
+
+  /*
+   * @parameter amount and bankid
+   * @return atm
+   * @see com.sbank.service.ATMService#createATM(com.sbank.wrappers.WrapperATMCreate)
+   */
   @Override
   public ATM createATM(WrapperATMCreate object) throws HandleException {
-  
+
     ATM atm = new ATM();
-    
+
     atm.setAmount(object.getAmount());
-    atm.setBank(bankrepository.findById(object.getBankId()).get());
-    
-    atm=atmrepository.save(atm);
-    
+    atm.setBank(bankServiceImpl.getBank(object.getBankId()));
+
+    atm = atmrepository.save(atm);
+
     return atm;
   }
 
+  /*
+   * requesting amount to bank and transfering to atm
+   * @see com.sbank.service.ATMService#addMoneyFromBank(com.sbank.wrappers.WrapperATMAddMoneyToATM)
+   */
   @Override
   public ATM addMoneyFromBank(WrapperATMAddMoneyToATM object) throws HandleException {
-    // TODO Auto-generated method stub
-    ATM atm =null;
-    try
-    {
-      Optional op1, op2;
-      
-      op1=atmrepository.findById(object.getAtmID());
-      op2=bankrepository.findById(object.getBankId());
-      if(op1.isPresent() && op2.isPresent())            //checking for valid data
-      {
-      
-         atm = atmrepository.findById(object.getAtmID()).get();
-  
-         atm.setAmount(atm.getAmount().add(object.getAmount()));
-  
-         atm.setBank(bankrepository.findById(object.getBankId()).get());
- 
-         Bank bank = bankrepository.findById(object.getBankId()).get();
 
-         BigDecimal bankamount = bank.getAmount();
-         
-         if(object.getAmount().compareTo(bankamount)==-1)        //checking for valid amount transefer
-         {
-         bank.setAmount(bank.getAmount().subtract(object.getAmount()));
-         bankrepository.saveAndFlush(bank);
-         
-         atm=atmrepository.save(atm);
-         }
-         else
-         {
-           throw new HandleException("invalid amount transfer request");
-         }
-
-        
-      }
-      else
-      {
-        throw new HandleException("invalid data");
-      }
-  
-    }
-    catch(HandleException e)
+    if (atmrepository.findById(object.getAtmID()).isPresent()
+        && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())) //validating input data
     {
-      throw new HandleException("Money can not be added into atm");
+      ATM atm = atmrepository.findById(object.getAtmID()).get();
+      atm.setAmount(atm.getAmount().add(object.getAmount()));
+      atm.setBank(bankServiceImpl.getBank(object.getBankId()));
+
+      Bank bank = bankServiceImpl.getBank(object.getBankId());
+
+      BigDecimal bankamount = bank.getAmount();
+      BigDecimal validamount = new BigDecimal(100);
+
+        if (object.getAmount().compareTo(bankamount) == -1
+            && object.getAmount().compareTo(validamount) == 1) // checking for valid amount transefer request
+          {
+               bank.setAmount(bank.getAmount().subtract(object.getAmount()));
+               bankServiceImpl.updateBank(bank);
+               atm = atmrepository.save(atm);
+               return atm;
+
+          } else {
+              throw new HandleException("invalid amount transfer request");
+                  }
+    } else {
+      throw new HandleException("invalid data");
     }
-    
-    return atm;
+
+  }
+
+  /* requesting an amount validating acrross atm - bank- account and accepting it
+   * @see com.sbank.service.ATMService#withdrawMoney(com.sbank.wrappers.WrapperATMWithdraw)
+   */
+  @Override
+  public ATM withdrawMoney(WrapperATMWithdraw object) throws HandleException {
+      
+    if(atmrepository.findById(object.getAtmId()).isPresent() 
+        && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
+        && accountServiceImpl.getAccountDetail(object.getAccountId()).getAccountId().equals(object.getAccountId()))   //validating the data
+         {
+            ATM atm = atmrepository.findById(object.getAtmId()).get();
+            BigDecimal initial = new BigDecimal(100);
+            BigDecimal validamount = new BigDecimal(100);
+            if(object.getAmount().compareTo(atm.getAmount())==-1 && object.getAmount().compareTo(validamount)==1)   //validating request wrt to atm
+            {
+                atm.setAmount(atm.getAmount().subtract(object.getAmount())); 
+                Bank bank = bankServiceImpl.getBank(object.getBankId());
+                
+                if((object.getAmount().compareTo(bank.getAmount())==-1) &&
+                    (object.getAmount().compareTo(validamount))==1) //validating the requested amount wrt bank                                                                                             //against money in atm
+                {
+                  
+                  
+                  Account account = accountServiceImpl.getAccountDetail(object.getAccountId());
+
+                      if((object.getAmount().compareTo(account.getAmount())==-1 || object.getAmount().compareTo(account.getAmount())==0)
+                          && object.getAmount().compareTo(validamount)==1 )   //validating wrt to account
+                          {
+                            account.setAmount(account.getAmount().subtract(object.getAmount()));
+                                                       
+                            Atm_Denomination permission = atmDenominationImpl.giveDenomination(object.getAtmId(), object.getAmount());
+                            
+                            if(permission.getPermission()==true)
+                            {
+                           
+                              /*when all validation is succesfull, saving into corresponding tables*/
+                              accountServiceImpl.updateAccount(account);
+                            
+                              atmrepository.save(atm);
+
+                            return atm;
+                            }
+                            else
+                            {
+                              throw new HandleException("Enter amount as per valid denomination"); 
+                            }
+                       } else {
+                                 throw new HandleException("requested amount denied by account , enter valid amount");
+                      }
+                   
+                } else {
+                          throw new HandleException("requested amount is denied by bank, enter valid amount");
+                }
+            } else {
+              throw new HandleException("requested amount is denied by atm, enter valid amount");
+            }
+         } else {
+                 throw new HandleException("Invalid data");
+
+         }
     
   }
 
   @Override
-  public ATM withdrawMoney(WrapperATMWithdraw object) throws HandleException {
-    // TODO Auto-generated method stub
-    ATM atm =null;
-    Optional op1, op2, op3;
-    try
-    {
-      op1= atmrepository.findById(object.getAtmId());
-      op2= bankrepository.findById(object.getBankId());
-      op3= accountrepository.findById(object.getAccountId());
-      
-      if(op1.isPresent() && op2.isPresent() && op3.isPresent())   //validating the data
-      {
-        atm = atmrepository.findById(object.getAtmId()).get();
-        atm.setAmount(atm.getAmount().subtract(object.getAmount()));
-      
-        Bank bank = bankrepository.findById(object.getBankId()).get();
-        BigDecimal initial = new BigDecimal(100);
-        if((object.getAmount().compareTo(atm.getAmount())==-1) && (object.getAmount().compareTo(initial))==1) //validating the requested amount
-                                                                                                             //against money in atm
-        {
-          bank.setAmount(atm.getAmount().subtract(object.getAmount()));
-        }
-        else
-        {
-          throw new HandleException("enter the valid amount");
-        }
-        bankrepository.saveAndFlush(bank);
-
-        Account account = accountrepository.findById(object.getAccountId()).get();
-        account.setAmount(account.getAmount().subtract(object.getAmount()));
-        accountrepository.saveAndFlush(account);
-       }
-      else
-      {
-        throw new HandleException("invalid data");
-      }
-    }
-    catch(HandleException g)
-    {
-      throw new HandleException("withdraw can not be done");
-    }
-
-    return atm;
+  public ATM getAtm(Long atmId) throws HandleException {
+    
+    
+    return (atmrepository.findById(atmId)).get();
   }
 
 }

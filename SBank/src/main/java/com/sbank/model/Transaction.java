@@ -13,12 +13,7 @@ public class Transaction {
   @Id
   @Column(name = "transacId", nullable = false, updatable = false)
   private Long transactionId;
-  public Long getTransactionId() {
-    return transactionId;
-  }
-  public void setTransactionId(Long transactionId) {
-    this.transactionId = transactionId;
-  }
+ 
   @ManyToOne(targetEntity=Customer.class)
   private Customer customer;
   @ManyToOne(targetEntity=Account.class)
@@ -27,7 +22,17 @@ public class Transaction {
   private BigDecimal amount;
   private String transactionType;
   
+  public Transaction()
+  {
+    
+  }
   
+  public Long getTransactionId() {
+    return transactionId;
+  }
+  public void setTransactionId(Long transactionId) {
+    this.transactionId = transactionId;
+  }
 
   public Customer getCustomer() {
     return customer;

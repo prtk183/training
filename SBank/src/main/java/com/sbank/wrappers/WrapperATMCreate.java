@@ -7,7 +7,7 @@ import com.sbank.model.Bank;
 public class WrapperATMCreate {
 
   private BigDecimal amount;
-  private BigDecimal bankId;
+  private Long bankId;
   
   public BigDecimal getAmount() {
     return amount;
@@ -15,10 +15,10 @@ public class WrapperATMCreate {
   public void setAmount(BigDecimal amount) {
     this.amount = amount;
   }
-  public BigDecimal getBankId() {
+  public Long getBankId() {
     return bankId;
   }
-  public void setBankId(BigDecimal bankId) {
+  public void setBankId(Long bankId) {
     this.bankId = bankId;
   }
 

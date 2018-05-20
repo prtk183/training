@@ -9,10 +9,10 @@ public class WrapperATMWithdraw {
   public void setAmount(BigDecimal amount) {
     this.amount = amount;
   }
-  public BigDecimal getBankId() {
+  public Long getBankId() {
     return bankId;
   }
-  public void setBankId(BigDecimal bankId) {
+  public void setBankId(Long bankId) {
     this.bankId = bankId;
   }
 
@@ -29,7 +29,7 @@ public class WrapperATMWithdraw {
     this.accountId = accountId;
   }
   private BigDecimal amount;
-  private BigDecimal bankId;
+  private Long bankId;
   private Long atmId;
   private Long accountId;
 }

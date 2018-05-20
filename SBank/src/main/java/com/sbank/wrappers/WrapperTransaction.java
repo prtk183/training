@@ -6,7 +6,24 @@ import com.sbank.model.Account;
 import com.sbank.model.Customer;
 
 public class WrapperTransaction {
-
+  private Long customerId;
+  private Long account;
+  private String ttype;
+  private BigDecimal amount;
+  
+  
+  WrapperTransaction()
+  {
+    
+  }
+  
+  public WrapperTransaction(Long customerId, Long account, String ttype, BigDecimal amount)
+  {
+    this.customerId= customerId;
+    this.account=account;
+    this.ttype=ttype;
+    this.amount=amount;
+  }
   public Long getCustomerId() {
     return customerId;
   }
@@ -26,10 +43,7 @@ public class WrapperTransaction {
     this.ttype = ttype;
   }
   
-  private Long customerId;
-  private Long account;
-  private String ttype;
-  private BigDecimal amount;
+
   public BigDecimal getAmount() {
     return amount;
   }

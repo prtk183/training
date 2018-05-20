@@ -14,11 +14,26 @@ import com.sbank.model.Customer;
  */
 public interface CustomerService {
 
-	
-	
+
+  /**
+   * @param customer
+   * @return customer
+   * @throws HandleException
+   */
   Customer createCustomer(Customer customer) throws HandleException;
 	
+  
+	/**
+	 * @return list of customer
+	 * @throws HandleException
+	 */
 	List<Customer> getCustomerdetails() throws HandleException;
 	
+	
+	/**
+	 * @param customerId
+	 * @return customer
+	 * @throws HandleException
+	 */
 	Customer getCustomer(Long customerId) throws HandleException;
 }

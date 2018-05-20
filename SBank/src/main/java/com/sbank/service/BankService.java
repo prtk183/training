@@ -15,10 +15,31 @@ import com.sbank.model.Bank;
  */
 public interface BankService  {
 
-	
+	/**/
+  /**
+   * @param bank
+   * @return bank
+   * @throws HandleException
+   */
   Bank createBank(Bank bank) throws HandleException ;
-	
+  
+
+	/**
+	 * @return list of banks
+	 * @throws HandleException
+	 */
 	List<Bank> getBankDetails( ) throws HandleException;
-	
-	Bank getBank(BigDecimal bankId) throws HandleException;
+
+	/**
+	 * @param bankId
+	 * @return bank
+	 * @throws HandleException
+	 */
+	Bank getBank(Long bankId) throws HandleException;
+	/**/
+	/**
+	 * @param bank
+	 * @throws HandleException
+	 */
+	void updateBank(Bank bank) throws HandleException;
 }

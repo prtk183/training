@@ -16,20 +16,20 @@ public class WrapperAccountDeposite {
   public void setCustomerId(Long customerId) {
     this.customerId = customerId;
   }
-  public BigDecimal getBankId() {
+  public Long getBankId() {
     return bankId;
   }
-  public void setBankId(BigDecimal bankId) {
+  public void setBankId(Long bankId) {
     this.bankId = bankId;
   }
-  public BigDecimal getAmt() {
-    return amt;
+  public BigDecimal getAmount() {
+    return amount;
   }
-  public void setAmt(BigDecimal amt) {
-    this.amt = amt;
+  public void setAmount(BigDecimal amount) {
+    this.amount = amount;
   }
   private Long accountId;
   private Long customerId;
-  private BigDecimal bankId;
-  private BigDecimal amt;
+  private Long bankId;
+  private BigDecimal amount;
 }

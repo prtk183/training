@@ -24,58 +24,42 @@ public class CustomerServiceImpl implements CustomerService {
 	private CustomerRepository customerRepository;
 	
 	 @Autowired
-	  BankRepository bankrepository;
-	
-
-	
-	/*
-	* creating customer
-	*
-	*/
-	@Override
+	  BankServiceImpl bankServiceImpl;
+	/**/
+	/* crating customer with id, pi, name and bankid
+	 * @see com.sbank.service.CustomerService#createCustomer(com.sbank.model.Customer)
+	 */
+	@SuppressWarnings("unlikely-arg-type")
+  @Override
 	public Customer createCustomer(Customer customer) throws HandleException {
 	  Customer addNewCustomer =null;
 	
 	   Bank bid=customer.getBank();
-	   BigDecimal id = bid.getBankId();
-
-	  
-	   Optional op = bankrepository.findById(id);
+	   Long id = bid.getBankId();
+	   System.out.println("search in db "+bankServiceImpl.getBank(customer.getBank().getBankId()));
+	   System.out.println("id in object"+customer.getBank().getBankId());
 	    
-	   try
-     {
-	    if(op.isPresent() )  //cheking valid bank in argument 
+	  if(( bankServiceImpl.getBank(customer.getBank().getBankId()).getBankId().equals(customer.getBank().getBankId()) )) //cheking valid bank in argument 
 	    {
-	      if( customer.getCustomerName().isEmpty() && customer.getCustomerName().isEmpty())  //checking valid customer data
-	      {
-	        throw new HandleException("data can not be null");
-
-	      }
-	      else
-	      {
-	        addNewCustomer =  customerRepository.save(customer);
-	      }
-	    }
-	    else
-	    {
+	        if( customer.getCustomerName().isEmpty() && customer.getCustomerName().isEmpty())  //checking valid customer data
+	          {
+	              throw new HandleException("data can not be null");
+	          } else {
+	                      addNewCustomer =  customerRepository.save(customer);
+	                      return addNewCustomer;
+	         }
+	    } else {
 	      throw new HandleException("bank id is not valid "); 
 	    }
-     }
-	  catch(HandleException e)
-	  {
-
-	    throw new HandleException("customer is not created "); 
-	  }
-	   
-	 return addNewCustomer;
-	
 	}
 
 
 
-/*
-* showing customers
-*/
+	/*
+   * showing customers
+   * 
+	 * @see com.sbank.service.CustomerService#getCustomerdetails()
+	 */
 	@Override
 	public List<Customer> getCustomerdetails() throws HandleException {
 		
@@ -83,11 +67,21 @@ public class CustomerServiceImpl implements CustomerService {
 		
 		custlist=customerRepository.findAll();
 		
+		if(custlist.size()==0)
+		{
+		  throw new HandleException("NO data found");
+		}
+		else
+		{
 		  return custlist;
+		}
 	}
 
 
-
+	/**/
+  /* get customer by id
+   * @see com.sbank.service.CustomerService#getCustomer(java.lang.Long)
+   */
   @Override
   public Customer getCustomer(Long customerId) throws HandleException {
     
@@ -98,10 +92,14 @@ public class CustomerServiceImpl implements CustomerService {
     if(op.isPresent())
     {
         customer = customerRepository.findById(customerId).get();
+        return customer;
+    }
+    else
+    {
+      throw new HandleException("customer data not found by id");
     }
     
-    
-    return customer;
+   
   }
 		
 

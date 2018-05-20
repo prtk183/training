@@ -19,6 +19,10 @@ import com.sbank.service.AccountServiceImpl;
 import com.sbank.wrappers.CreateAccountWrapper;
 import com.sbank.wrappers.WrapperAccountDeposite;
 
+/**
+ * @author hp
+ *
+ */
 @Controller
 public class AccountController {
   
@@ -32,15 +36,21 @@ public class AccountController {
    * 
    * */
   @PostMapping("/createaccount")
-  public ResponseEntity<Account> callcreateAccount( @RequestBody CreateAccountWrapper object) throws HandleException  
+  public ResponseEntity<?> callcreateAccount( @RequestBody CreateAccountWrapper object) throws HandleException  
   {
       
     Account act = accountServiceImpl.createAccount(object);
-  
+    
     return new ResponseEntity<Account>(act, HttpStatus.OK);
+    
      
   }
-  
+
+  /**
+   * calling getaccount service 
+   * @return
+   * @throws HandleException
+   */
   @GetMapping("/getaccounts")
   public ResponseEntity<List<Account>> callgetAccountDetails() throws HandleException
   {
@@ -51,6 +61,12 @@ public class AccountController {
     
   }
   
+  /**/
+  /**
+   * @param object
+   * @return
+   * @throws HandleException
+   */
   @PostMapping("/depositemoney")
   public  ResponseEntity<Account> depositeMoney(@RequestBody WrapperAccountDeposite object) throws HandleException
   {
@@ -59,7 +75,12 @@ public class AccountController {
     return new ResponseEntity<Account>(act, HttpStatus.OK);
   }
 
-  
+  /**/
+  /**
+   * @param object
+   * @return
+   * @throws HandleException
+   */
   @PostMapping("/withdrawmoneyfromaccount")
   public ResponseEntity<Account> withdrawMoney(@RequestBody WrapperAccountDeposite object) throws HandleException
   {

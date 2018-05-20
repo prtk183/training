@@ -34,13 +34,13 @@ public class Bank {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "bank_Id")
-  private BigDecimal bankId;
+  private Long bankId;
 
-  public BigDecimal getBankId() {
+  public Long getBankId() {
     return bankId;
   }
 
-  public void setBankId(BigDecimal bankId) {
+  public void setBankId(Long bankId) {
     this.bankId = bankId;
   }
 

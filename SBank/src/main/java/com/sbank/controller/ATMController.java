@@ -30,10 +30,14 @@ public class ATMController {
  
   @Autowired
   com.sbank.service.ATMServiceImpl ATMServiceImpl;
-  /*
+
+  /**
    * this will call create atm in service
    * with arguments as bankid and its own details
-   * */
+   * @param object
+   * @return
+   * @throws HandleException
+   */
   @PostMapping("/createatm")
   public ResponseEntity<ATM> callcreateATM(@RequestBody WrapperATMCreate object) throws HandleException
   {
@@ -44,10 +48,12 @@ public class ATMController {
     
     return new ResponseEntity<ATM>(atm,HttpStatus.OK);
   }
-  
-  /*
-   * to add money from bank
-   * */
+
+  /**to add money from bank
+   * @param object
+   * @return
+   * @throws HandleException
+   */
   @PostMapping("/addmoneyfrombank")
   public ResponseEntity<ATM> calladdMoneyFromBank(@RequestBody WrapperATMAddMoneyToATM object) throws HandleException
   {
@@ -56,11 +62,13 @@ public class ATMController {
     atm = ATMServiceImpl.addMoneyFromBank(object);
     return new ResponseEntity<ATM>(atm,HttpStatus.OK);
   }
- 
-  /*
-   * 
+
+  /**
    * call withdraw service
-   * */
+   * @param object
+   * @return
+   * @throws HandleException
+   */
   @PostMapping("/withdrawmoney")
   public ResponseEntity<ATM> callwithdrawMoney(@RequestBody WrapperATMWithdraw object) throws HandleException
   {

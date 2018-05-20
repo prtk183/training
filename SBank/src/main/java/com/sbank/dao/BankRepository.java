@@ -13,7 +13,7 @@ import com.sbank.model.Bank;
  * @author trainee
  *
  */
-public interface BankRepository extends JpaRepository<Bank, BigDecimal> {
+public interface BankRepository extends JpaRepository<Bank, Long> {
 
 	
 	

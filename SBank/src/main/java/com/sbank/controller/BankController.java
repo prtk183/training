@@ -32,9 +32,13 @@ public class BankController {
 	@Autowired
 	BankServiceImpl bankServiceImpl;
 	
-	/*
-	*creating a bank, 
-	*/
+	
+	/**
+	 * creating a bank
+	 * @param amount
+	 * @return
+	 * @throws HandleException
+	 */
 	@PostMapping("/createbank")
 	public ResponseEntity<Bank> callCreateBank( @RequestBody  BigDecimal amount) throws HandleException
 	{
@@ -49,8 +53,10 @@ public class BankController {
 		
 	}
 	
-	/*
-	 * showing bank details
+	/**
+	 *  showing bank details
+	 * @return
+	 * @throws HandleException
 	 */
 	@GetMapping("/getbankdetails")
 	public ResponseEntity<List<Bank>> getBankDetails() throws HandleException
