@@ -6,8 +6,10 @@ package com.sbank.controller;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,11 @@ public class CustomerController {
 
   @Autowired
   BankServiceImpl bankServiceImpl;
+  
+  @Autowired
+  Environment environment;
+  
+  Logger Log = Logger.getLogger(CustomerController.class.getName());
 
   /**
    * 
@@ -46,15 +53,19 @@ public class CustomerController {
    * @throws HandleException
    */
   @PostMapping(path = "/createcustomer", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<Customer> addOneCustomer(@RequestBody WrapperClass wrapperClass) throws HandleException {
+  public ResponseEntity<?> 
+  addOneCustomer(@RequestBody WrapperClass wrapperClass) throws HandleException {
 
- 
-    Bank b = bankServiceImpl.getBank(wrapperClass.bankId);
-    Customer cust = wrapperClass.customer;
+    Log.info("calling comtroller create customer");
+    final Bank b = bankServiceImpl.getBank(wrapperClass.bankId);
+    final Customer cust = wrapperClass.customer;
     cust.setBankId(b);
-    Customer result = customerServiceImpl.createCustomer(cust);
+    final Customer result = customerServiceImpl.createCustomer(cust);
+    if(result!=null)
 
-    return new ResponseEntity<Customer>(result, HttpStatus.OK);
+    {return new ResponseEntity<Customer>(result, HttpStatus.OK);}
+    else
+    {return new ResponseEntity<String>(environment.getProperty("999"), HttpStatus.BAD_GATEWAY);}
     
   }
 
@@ -65,10 +76,13 @@ public class CustomerController {
    * @throws HandleException
    */
   @GetMapping("/viewcustomer")
-  public ResponseEntity<List<Customer>> viewCustomer() throws HandleException {
-    List<Customer> result = customerServiceImpl.getCustomerdetails();
-
-    return new ResponseEntity<List<Customer>>(result, HttpStatus.OK);
+  public ResponseEntity<?> viewCustomer() throws HandleException {
+    Log.info("calling controller view  customer");
+    final List<Customer> result = customerServiceImpl.getCustomerdetails();
+    if(result!=null)
+    {return new ResponseEntity<List<Customer>>(result, HttpStatus.OK);}
+    else
+    {return new ResponseEntity<String>(environment.getProperty("999"), HttpStatus.BAD_REQUEST);}
 
   }
 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.sbank.dao.ATMRepository;
@@ -24,6 +25,9 @@ public class AtmDenominationImpl implements AtmDenominationService{
   
   @Autowired
   ATMService atmService;
+  
+  @Autowired
+  Environment environment;
 
   @Override
   public Atm_Denomination giveDenomination(Long atmId, BigDecimal requestAmount) throws HandleException{
@@ -110,11 +114,11 @@ public class AtmDenominationImpl implements AtmDenominationService{
             return atmobject;
             
         } else {
-          throw new HandleException("amount is odd, enter valid amount in denomination");
+          throw new HandleException(environment.getProperty("601"));
         }
       
     } else {
-      throw new HandleException("Atm is not valid");
+      throw new HandleException(environment.getProperty("666"));
     }
     
     

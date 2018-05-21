@@ -1,8 +1,10 @@
 package com.sbank.controller;
 
 import java.math.BigDecimal;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,7 +32,11 @@ public class ATMController {
  
   @Autowired
   com.sbank.service.ATMServiceImpl ATMServiceImpl;
+  
+  @Autowired
+  Environment environment;
 
+  Logger log = Logger.getLogger(ATMController.class.getName());
   /**
    * this will call create atm in service
    * with arguments as bankid and its own details
@@ -39,14 +45,16 @@ public class ATMController {
    * @throws HandleException
    */
   @PostMapping("/createatm")
-  public ResponseEntity<ATM> callcreateATM(@RequestBody WrapperATMCreate object) throws HandleException
+  public ResponseEntity<?> callcreateATM(@RequestBody WrapperATMCreate object) throws HandleException
   {
     ATM atm = new ATM();
-    
+    log.info("in controller creating atm");
  
     atm = ATMServiceImpl.createATM(object);
-    
-    return new ResponseEntity<ATM>(atm,HttpStatus.OK);
+    if(atm!=null)
+    {return new ResponseEntity<ATM>(atm,HttpStatus.OK);}
+    else
+    {return new ResponseEntity<String>(environment.getProperty("999"),HttpStatus.BAD_REQUEST);}
   }
 
   /**to add money from bank
@@ -55,12 +63,16 @@ public class ATMController {
    * @throws HandleException
    */
   @PostMapping("/addmoneyfrombank")
-  public ResponseEntity<ATM> calladdMoneyFromBank(@RequestBody WrapperATMAddMoneyToATM object) throws HandleException
+  public ResponseEntity<?> calladdMoneyFromBank(@RequestBody WrapperATMAddMoneyToATM object) throws HandleException
   {
     ATM atm = new ATM();
-
+    log.info("in controller calladdMoneyFromBank");
     atm = ATMServiceImpl.addMoneyFromBank(object);
-    return new ResponseEntity<ATM>(atm,HttpStatus.OK);
+ 
+    if(atm!=null)
+    {return new ResponseEntity<ATM>(atm,HttpStatus.OK);}
+    else
+    {return new ResponseEntity<String>(environment.getProperty("999"),HttpStatus.BAD_REQUEST);}
   }
 
   /**
@@ -70,11 +82,14 @@ public class ATMController {
    * @throws HandleException
    */
   @PostMapping("/withdrawmoney")
-  public ResponseEntity<ATM> callwithdrawMoney(@RequestBody WrapperATMWithdraw object) throws HandleException
+  public ResponseEntity<?> callwithdrawMoney(@RequestBody WrapperATMWithdraw object) throws HandleException
   {
     ATM atm = new ATM();
-
+    log.info("in controller callwithdrawMoney");
     atm = ATMServiceImpl.withdrawMoney(object);
-    return new ResponseEntity<ATM>(atm,HttpStatus.OK);
+    if(atm!=null)
+    {return new ResponseEntity<ATM>(atm,HttpStatus.OK);}
+    else
+    {return new ResponseEntity<String>(environment.getProperty("999"),HttpStatus.BAD_REQUEST);}
   }
 }

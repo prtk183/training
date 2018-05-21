@@ -2,8 +2,10 @@ package com.sbank.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.sbank.dao.AccountRepository;
@@ -25,13 +27,17 @@ public class TransactionServiceImpl implements TransactionService{
   @Autowired
   private TransactionRepository transactionRepository;
   
+  @Autowired
+  Environment environment;
+  
+  Logger log = Logger.getLogger(TransactionServiceImpl.class.getName());
   /**/
   /* create transaction
    * @see com.sbank.service.TransactionService#createTransaction(com.sbank.wrappers.WrapperTransaction)
    */
   @Override
   public Transaction createTransaction(WrapperTransaction obj) throws HandleException {
-    
+    log.info("in trnsaction service createTransaction ");
     if(accountServiceImpl.getAccountDetail(obj.getAccount()).getAccountId().equals(obj.getAccount())) //validating account
     {
          Account account  = accountServiceImpl.getAccountDetail(obj.getAccount());
@@ -53,10 +59,10 @@ public class TransactionServiceImpl implements TransactionService{
    
            } else {
         
-             throw new HandleException("customer not found");
+             throw new HandleException(environment.getProperty("501"));
            }
     }  else {
-      throw new HandleException("account not found");
+      throw new HandleException(environment.getProperty("502"));
     }
   }
 
@@ -66,7 +72,7 @@ public class TransactionServiceImpl implements TransactionService{
    */
   @Override
   public List<Transaction> generteTransactionReport(Long accountId) throws HandleException {
- 
+    log.info("in trnsaction service generteTransactionReport");
     List<Transaction> TransactionList  = transactionRepository.findAll();
    
     List<Transaction> TransactionReportForById= new ArrayList<Transaction>();
@@ -88,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService{
     System.out.println("totalList"+TransactionReportForById);
     if(TransactionReportForById.isEmpty())
     {
-      throw new HandleException("no record found");
+      throw new HandleException(environment.getProperty("500"));
     }
     else
     {
@@ -98,7 +104,7 @@ public class TransactionServiceImpl implements TransactionService{
 
   @Override
   public Transaction getTransaction(Long transactionId) throws HandleException {
-
+    log.info("in trnsaction service getTransaction");
     Transaction Tax = transactionRepository.findById(transactionId).get();
     return Tax;
   }

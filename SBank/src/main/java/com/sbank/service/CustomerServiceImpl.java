@@ -7,8 +7,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.sbank.controller.CustomerController;
 import com.sbank.dao.BankRepository;
 import com.sbank.dao.CustomerRepository;
 import com.sbank.exception.HandleException;
@@ -23,6 +25,10 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	private CustomerRepository customerRepository;
 	
+  Logger Log = Logger.getLogger(CustomerServiceImpl.class.getName());
+  
+  @Autowired
+  Environment environment;
 	 @Autowired
 	  BankServiceImpl bankServiceImpl;
 	/**/
@@ -33,23 +39,26 @@ public class CustomerServiceImpl implements CustomerService {
   @Override
 	public Customer createCustomer(Customer customer) throws HandleException {
 	  Customer addNewCustomer =null;
-	
+	Log.info("in customer service calling createCustomer");
+	  
 	   Bank bid=customer.getBank();
 	   Long id = bid.getBankId();
 	   System.out.println("search in db "+bankServiceImpl.getBank(customer.getBank().getBankId()));
 	   System.out.println("id in object"+customer.getBank().getBankId());
 	    
-	  if(( bankServiceImpl.getBank(customer.getBank().getBankId()).getBankId().equals(customer.getBank().getBankId()) )) //cheking valid bank in argument 
+	  if(( bankServiceImpl.getBank(customer.getBank().getBankId()).getBankId()
+	      .equals(customer.getBank().getBankId()) )) //cheking valid bank in argument 
 	    {
-	        if( customer.getCustomerName().isEmpty() && customer.getCustomerName().isEmpty())  //checking valid customer data
+	        if( customer.getCustomerName().isEmpty()
+	            && customer.getCustomerName().isEmpty())  //checking valid customer data
 	          {
-	              throw new HandleException("data can not be null");
+	              throw new HandleException(environment.getProperty("201"));
 	          } else {
 	                      addNewCustomer =  customerRepository.save(customer);
 	                      return addNewCustomer;
 	         }
 	    } else {
-	      throw new HandleException("bank id is not valid "); 
+	      throw new HandleException(environment.getProperty("202")); 
 	    }
 	}
 
@@ -63,13 +72,14 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public List<Customer> getCustomerdetails() throws HandleException {
 		
+	  Log.info("in customer service calling getCustomerdetails");
 		List<Customer> custlist;
 		
 		custlist=customerRepository.findAll();
 		
 		if(custlist.size()==0)
 		{
-		  throw new HandleException("NO data found");
+		  throw new HandleException(environment.getProperty("200"));
 		}
 		else
 		{
@@ -84,7 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
    */
   @Override
   public Customer getCustomer(Long customerId) throws HandleException {
-    
+    Log.info("in customer service calling getCustomer");
     Optional op;
     Customer customer=null;
     
@@ -96,7 +106,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
     else
     {
-      throw new HandleException("customer data not found by id");
+      throw new HandleException(environment.getProperty("200"));
     }
     
    

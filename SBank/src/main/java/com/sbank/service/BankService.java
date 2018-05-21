@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.sbank.exception.HandleException;
 import com.sbank.model.Bank;
+import com.sbank.model.RefMoney;
+import com.sbank.wrappers.WrapperCreateBank;
 
 /**
  * @author trainee
@@ -21,7 +23,7 @@ public interface BankService  {
    * @return bank
    * @throws HandleException
    */
-  Bank createBank(Bank bank) throws HandleException ;
+  Bank createBank(WrapperCreateBank object) throws HandleException ;
   
 
 	/**

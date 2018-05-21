@@ -2,8 +2,10 @@ package com.sbank.service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.sbank.dao.ATMRepository;
@@ -34,6 +36,11 @@ public class ATMServiceImpl implements ATMService {
   
   @Autowired
   AtmDenominationImpl atmDenominationImpl;
+  
+  @Autowired
+  Environment environment;
+  
+  Logger log = Logger.getLogger(ATMServiceImpl.class.getName());
 
   /*
    * @parameter amount and bankid
@@ -42,7 +49,7 @@ public class ATMServiceImpl implements ATMService {
    */
   @Override
   public ATM createATM(WrapperATMCreate object) throws HandleException {
-
+log.info("in atm service creating atm");
     ATM atm = new ATM();
 
     atm.setAmount(object.getAmount());
@@ -59,6 +66,7 @@ public class ATMServiceImpl implements ATMService {
    */
   @Override
   public ATM addMoneyFromBank(WrapperATMAddMoneyToATM object) throws HandleException {
+    log.info("in atm service addMoneyFromBank");
 
     if (atmrepository.findById(object.getAtmID()).isPresent()
         && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())) //validating input data
@@ -81,10 +89,10 @@ public class ATMServiceImpl implements ATMService {
                return atm;
 
           } else {
-              throw new HandleException("invalid amount transfer request");
+              throw new HandleException(environment.getProperty("401"));
                   }
     } else {
-      throw new HandleException("invalid data");
+      throw new HandleException(environment.getProperty("400"));
     }
 
   }
@@ -94,7 +102,7 @@ public class ATMServiceImpl implements ATMService {
    */
   @Override
   public ATM withdrawMoney(WrapperATMWithdraw object) throws HandleException {
-      
+    log.info("in atm service WrapperATMWithdraw");
     if(atmrepository.findById(object.getAtmId()).isPresent() 
         && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
         && accountServiceImpl.getAccountDetail(object.getAccountId()).getAccountId().equals(object.getAccountId()))   //validating the data
@@ -133,20 +141,20 @@ public class ATMServiceImpl implements ATMService {
                             }
                             else
                             {
-                              throw new HandleException("Enter amount as per valid denomination"); 
+                              throw new HandleException(environment.getProperty("402")); 
                             }
                        } else {
-                                 throw new HandleException("requested amount denied by account , enter valid amount");
+                                 throw new HandleException(environment.getProperty("403"));
                       }
                    
                 } else {
-                          throw new HandleException("requested amount is denied by bank, enter valid amount");
+                          throw new HandleException(environment.getProperty("405"));
                 }
             } else {
-              throw new HandleException("requested amount is denied by atm, enter valid amount");
+              throw new HandleException(environment.getProperty("406"));
             }
          } else {
-                 throw new HandleException("Invalid data");
+                 throw new HandleException(environment.getProperty("400"));
 
          }
     
@@ -154,7 +162,7 @@ public class ATMServiceImpl implements ATMService {
 
   @Override
   public ATM getAtm(Long atmId) throws HandleException {
-    
+    log.info("in atm service getAtm");
     
     return (atmrepository.findById(atmId)).get();
   }

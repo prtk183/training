@@ -1,14 +1,19 @@
 package com.sbank.service;
 
 import java.util.List;
+import java.util.logging.Logger;
 
-import com.sbank.wrappers.CreateAccountWrapper;
-import com.sbank.wrappers.WrapperAccountDeposite;
 import com.sbank.exception.HandleException;
 import com.sbank.model.Account;
+import com.sbank.wrappers.CreateAccountWrapper;
+import com.sbank.wrappers.WrapperAccountDeposite;
 
 public interface AccountService {
   
+
+ 
+  @SuppressWarnings("PMD.CommentRequired")
+  Logger log = Logger.getLogger(AccountService.class.getName()); //logging
   /**
    * @param object
    * @return

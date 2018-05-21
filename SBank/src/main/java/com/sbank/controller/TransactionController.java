@@ -1,8 +1,10 @@
 package com.sbank.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,18 +27,24 @@ public class TransactionController {
   @Autowired
   TransactionServiceImpl transactonServiceImpl;
   
+  @Autowired
+  Environment environment;
   
+  Logger log = Logger.getLogger(TransactionController.class.getName());
   /**
    * @param object
    * @return
    * @throws HandleException
    */
   @PostMapping("/createtransaction")
-   public  ResponseEntity<Transaction> createTransaction( @RequestBody WrapperTransaction object) throws HandleException
+   public  ResponseEntity<?> createTransaction( @RequestBody WrapperTransaction object) throws HandleException
    {
+    log.info("in transaction controller createTransaction");
      Transaction tax = transactonServiceImpl.createTransaction(object);
-     
-       return new ResponseEntity<Transaction>(tax, HttpStatus.OK);
+     if(tax!=null)
+     {return new ResponseEntity<Transaction>(tax, HttpStatus.OK);}
+     else
+     { return new ResponseEntity<String>(environment.getProperty("999"), HttpStatus.BAD_REQUEST);}
     }
   
   
@@ -46,11 +54,13 @@ public class TransactionController {
    * @throws HandleException
    */
   @GetMapping("/generatetransactionreport/{accountId}")
-  public  ResponseEntity<List<Transaction>> generatetransactionreport( @PathVariable Long accountId) throws HandleException
-  {  
+  public  ResponseEntity<?> generatetransactionreport( @PathVariable Long accountId) throws HandleException
+  {  log.info("in transaction controller generatetransactionreport ");
     List<Transaction> tax = transactonServiceImpl.generteTransactionReport(accountId);
-     
-       return new ResponseEntity<List<Transaction>>(tax, HttpStatus.OK);
+     if(tax!=null)
+       {return new ResponseEntity<List<Transaction>>(tax, HttpStatus.OK);}
+     else
+     {       return new ResponseEntity<String>(environment.getProperty("999"), HttpStatus.BAD_REQUEST);}
     }
   
 }

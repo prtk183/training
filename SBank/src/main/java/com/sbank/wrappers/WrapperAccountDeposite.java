@@ -32,4 +32,11 @@ public class WrapperAccountDeposite {
   private Long customerId;
   private Long bankId;
   private BigDecimal amount;
+  private Long RefId;
+  public Long getRefId() {
+    return RefId;
+  }
+  public void setRefId(Long refId) {
+    RefId = refId;
+  }
 }

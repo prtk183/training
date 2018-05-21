@@ -7,7 +7,7 @@ public class HandleException extends Exception {
       // TODO Auto-generated constructor stub
       
       super(msg);
-      msg="no data found";
+      msg="999";
     }
 
   

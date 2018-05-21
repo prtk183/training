@@ -19,16 +19,5 @@ public class SBankApplication {
 	
 	public SBankApplication(){};
 	
-	public Bank addBank(BigDecimal amount) {
-	  
-    final String uri = "http://localhost:8080/createbank";
 
-    RestTemplate restTemplate = new RestTemplate();
-
-    Bank result = restTemplate.postForObject(uri, amount, Bank.class);
-
-    System.out.println(result);
-    
-    return result;
-  }
 }
