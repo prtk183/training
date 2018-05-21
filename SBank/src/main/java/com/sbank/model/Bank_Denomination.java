@@ -7,6 +7,7 @@ public class Bank_Denomination {
   private Long bankId;
   private BigDecimal denomination;
   private Integer noofdenomination;
+  private BigDecimal amount;
   
   Bank_Denomination()
   {

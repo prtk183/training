@@ -95,49 +95,7 @@ public class AtmDenominationImpl implements AtmDenominationService{
                 throw new HandleException("invalid amount");
               }
               
-              
-              /*System.out.println("in loop");
-                if(amount.compareTo(twothousand)==1 && amount.compareTo(twothousand)==0)
-                  {
-                      thowthousandcount = amount.divide(twothousand);
-                      amount = amount.remainder(twothousand);
-                      System.out.println("in 2000");
-                      System.out.println(thowthousandcount);
-                      System.out.println(amount);
-
-                      
-                   }
-                  else if(amount.compareTo(twothousand)==-1 && amount.compareTo(fivehundres)==1 && amount.compareTo(fivehundres)==0)
-                      {
-                        fivehundredcount=amount.divide(fivehundres);
-                        amount=amount.remainder(fivehundres);
-                        System.out.println("in 500");
-                        System.out.println(fivehundredcount);
-                        System.out.println(amount);
-                       
-                      }
-                      else if (amount.compareTo(fivehundres)==-1 && amount.compareTo(twohundred)==1 && amount.compareTo(twohundred)==0)
-                          {
-                            thwohundredcount = amount.divide(twohundred);
-                            amount = amount.remainder(twohundred);
-                            System.out.println("in 200");
-                            System.out.println(thwohundredcount);
-                            System.out.println(amount);
-                           
-                          }
-                          else if (amount.compareTo(twohundred)==-1 && amount.compareTo(hundred)==1 && amount.compareTo(hundred)==0)
-                                {
-                                    hundredcount = amount.divide(hundred);
-                                    amount = amount.remainder(hundred);
-                                    System.out.println("in 100");
-                                    System.out.println(hundredcount);
-                                    System.out.println(amount);
-                                }
-                              else if(amount.compareTo(hundred)==-1)
-                              {
-                                throw new HandleException("not valid amount");
-                              }
-            */
+            
               
             }
  

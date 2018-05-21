@@ -1,5 +1,6 @@
 package com.sbank.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class TransactionServiceImpl implements TransactionService{
              
              String ttype= obj.getTtype();
              Transaction tax= new Transaction();
-            tax.setTransactionId(account.getAccountId());
+    
              tax.setAccount(account);     
              tax.setCustomer(customer);
              tax.setTransactionType(ttype);
@@ -64,21 +65,27 @@ public class TransactionServiceImpl implements TransactionService{
    * @see com.sbank.service.TransactionService#generteTransactionReport(com.sbank.wrappers.WrapperTransaction)
    */
   @Override
-  public List<Transaction> generteTransactionReport(WrapperTransaction obj) throws HandleException {
+  public List<Transaction> generteTransactionReport(Long accountId) throws HandleException {
  
     List<Transaction> TransactionList  = transactionRepository.findAll();
-    
-    List<Transaction> TransactionReportForById=null;
-    
-    for(Transaction ts: TransactionList)
+   
+    List<Transaction> TransactionReportForById= new ArrayList<Transaction>();
+    System.out.println(TransactionList);
+    System.out.println("above loop");
+  //  System.out.println("a+"+ts.getAccount().getAccountId());
+    System.out.println("b+"+accountId);
+    for(Transaction ts :TransactionList)
     {
-      if(ts.getAccount().getAccountId().equals(obj.getAccount()))     //fetching transaction record for an account id
+      int i=0;
+      if(ts.getAccount().getAccountId().equals(accountId))     //fetching transaction record for an account id
       {
-        TransactionReportForById.add(transactionRepository.findById(ts.getTransactionId()).get());
-        
-        
+    
+            TransactionReportForById.add(transactionRepository.findById(ts.getTransactionId()).get());
+    
       }
+      System.out.println("yttreresdf"+i++);
     }
+    System.out.println("totalList"+TransactionReportForById);
     if(TransactionReportForById.isEmpty())
     {
       throw new HandleException("no record found");
@@ -87,6 +94,13 @@ public class TransactionServiceImpl implements TransactionService{
     {
        return TransactionReportForById;
     }
+  }
+
+  @Override
+  public Transaction getTransaction(Long transactionId) throws HandleException {
+
+    Transaction Tax = transactionRepository.findById(transactionId).get();
+    return Tax;
   }
 
 }

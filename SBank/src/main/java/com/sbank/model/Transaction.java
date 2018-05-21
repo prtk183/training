@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -12,6 +14,7 @@ public class Transaction {
   
   @Id
   @Column(name = "transacId", nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long transactionId;
  
   @ManyToOne(targetEntity=Customer.class)
@@ -19,6 +22,11 @@ public class Transaction {
   @ManyToOne(targetEntity=Account.class)
   private Account account;
   
+  @Override
+  public String toString() {
+    return "Transaction [transactionId=" + transactionId + ", customer=" + customer + ", account="
+        + account + ", amount=" + amount + ", transactionType=" + transactionType + "]";
+  }
   private BigDecimal amount;
   private String transactionType;
   

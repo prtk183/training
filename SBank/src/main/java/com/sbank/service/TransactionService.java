@@ -22,6 +22,14 @@ public interface TransactionService {
    * @return
    * @throws HandleException
    */
-  public List<Transaction> generteTransactionReport(WrapperTransaction obj) throws HandleException;
+  public List<Transaction> generteTransactionReport(Long obj) throws HandleException;
+  
+  
+  /**
+   * @param transactionId
+   * @return
+   * @throws HandleException
+   */
+  public Transaction getTransaction(Long transactionId) throws HandleException;
 
 }

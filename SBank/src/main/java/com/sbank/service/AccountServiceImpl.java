@@ -100,6 +100,8 @@ public class AccountServiceImpl implements AccountService {
           if(object.getAmount().compareTo(val)==1){
               BigDecimal updatedbank = initialamountinbank.add(object.getAmount()); // adding depositing into bank
               BigDecimal updatedact = initialamountinaccount.add(object.getAmount()); // adding depositing in account
+              
+              
 
               act.setAmount(updatedact);
               bank.setAmount(updatedbank);
