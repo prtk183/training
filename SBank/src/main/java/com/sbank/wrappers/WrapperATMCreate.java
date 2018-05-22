@@ -2,11 +2,14 @@ package com.sbank.wrappers;
 
 import java.math.BigDecimal;
 
+
+
 import com.sbank.model.Bank;
 
 public class WrapperATMCreate {
-
+  /**--------*/
   private BigDecimal amount;
+  /**--------*/
   private Long bankId;
   
   public BigDecimal getAmount() {

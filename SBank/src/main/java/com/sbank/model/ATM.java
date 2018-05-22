@@ -16,14 +16,16 @@ import com.sbank.model.Bank;
 @Table(name="ATM")
 public class ATM {
   
+  /**------------*/
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
   private Long ATMId;
-  
+  /**------------*/
   private BigDecimal amount;
 
   
   @ManyToOne(targetEntity=Bank.class)
+  /**------------*/
   private Bank bank;
 
   public Long getATMId() {

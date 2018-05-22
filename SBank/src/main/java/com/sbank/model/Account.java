@@ -10,24 +10,31 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import net.bytebuddy.implementation.bind.annotation.Empty;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Account {
 
-  @Id 
+  /**------------*/
+  @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long accountId;
   
   //private Integer customerId;
-  
+  /**------------*/
   private BigDecimal amount;
-  
+  /**------------*/
   @ManyToOne(targetEntity=Bank.class)
   private Bank bank;
   
   
+  /**------------*/
   @OneToOne
   @JoinColumn(name = "customerId", nullable = false)
   Customer customer;

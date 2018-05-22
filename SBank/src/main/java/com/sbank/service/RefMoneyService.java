@@ -1,11 +1,13 @@
 package com.sbank.service;
 
+import java.util.List;
+
 import com.sbank.exception.HandleException;
 import com.sbank.model.RefMoney;
 
 public interface RefMoneyService {
 
-  public RefMoney update(RefMoney refMoney) throws HandleException;
+  public  List<Integer> update(Integer currency) throws HandleException;
   
-  public RefMoney getRef(Long refId) throws HandleException;
+  public List<Integer> getRefTable() throws HandleException;
 }

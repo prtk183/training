@@ -2,7 +2,16 @@ package com.sbank.wrappers;
 
 import java.math.BigDecimal;
 
+
 public class WrapperATMAddMoneyToATM {
+  
+  /**--------*/
+  private BigDecimal amount;
+  /**--------*/
+  private Long bankId;
+  /**--------*/
+  private Long atmID;
+  
   public BigDecimal getAmount() {
     return amount;
   }
@@ -17,9 +26,7 @@ public class WrapperATMAddMoneyToATM {
     this.bankId = bankId;
   }
 
-  private BigDecimal amount;
-  private Long bankId;
-  private Long atmID;
+ 
   
   public Long getAtmID() {
     return atmID;

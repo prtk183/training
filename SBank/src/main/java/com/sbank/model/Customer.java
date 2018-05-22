@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -15,20 +16,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "CUSTOMER")
 public class Customer {
 
-  @Override
-  public String toString() {
-    return "Customer [customerId=" + customerId + ", customerName=" + customerName + ", pin=" + pin
-        + "]";
-  }
-
+ 
+/**-------------*/
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long customerId;
 
+  /**-------------*/
   private String customerName;
-
+  /**-------------*/
   private Integer pin;
-
+  /**-------------*/
   @ManyToOne(targetEntity = Bank.class, fetch=FetchType.LAZY)
   private Bank bank;
 
@@ -43,25 +41,33 @@ public class Customer {
   public Customer() {
     // TODO Auto-generated constructor stub
   }
+  
+  
+  @Override
+  public String toString() {
+    return "Customer [customerId=" + customerId + ", customerName=" + customerName + ", pin=" + pin
+        + "]";
+  }
 
-  /*
-   * @OneToOne
-   * 
-   * @JoinColumn(name = "accountId", nullable = false) private Account account;
-   * 
-   * public Account getAccount() { return account; }
-   * 
-   * public void setAccount(Account account) { this.account = account; }
+ 
+/**/
+  /**
+   * @param bank
    */
-
   public void setBank(Bank bank) {
     this.bank = bank;
   }
-
+/**/
+  /**
+   * @return
+   */
   public Bank getBank() {
     return bank;
   }
-
+/**/
+  /**
+   * @param bank
+   */
   public void setBankId(Bank bank) {
     this.bank = bank;
   }

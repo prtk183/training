@@ -32,12 +32,8 @@ public class BankServiceImpl  implements BankService {
 	
 	@Autowired
 	BankRepository bankrepository;
+
 	
-	@Autowired
-	RefMoneyServiceImpl   refMoneyServiceImpl ;
-	
-	@Autowired
-	BankDenominationImpl BankDenominationServiceImpl;
 	@Autowired
 	Environment environment;
 	
@@ -50,7 +46,7 @@ public class BankServiceImpl  implements BankService {
 	  
 	log.info("in service createBank");
 	  Bank BankCustomer=null;
-	  BigDecimal restrict = new BigDecimal(0);
+	  BigDecimal restrict = new BigDecimal(1000);
 	  
 	  if(object.getAmount().compareTo(restrict)==-1)     //validating initial amount it can not be -ve
 	  {

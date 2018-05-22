@@ -3,18 +3,18 @@
  */
 package com.sbank.wrappers;
 
-import java.math.BigDecimal;
-
-import com.sbank.model.Bank;
 import com.sbank.model.Customer;
+import com.sbank.model.Bank;
 
 /**
  * @author trainee
  *
  */
 public class WrapperClass {
-
+ /**--------bankId-----*/
   public Long bankId;
+  /**-----customer--------*/
+  public Customer customer;
   
 	public Long getBankId() {
     return bankId;
@@ -22,8 +22,7 @@ public class WrapperClass {
   public void setBankId(Long bankId) {
     this.bankId = bankId;
   }
-  
-  public Customer customer;
+ 
 	
 	/**
 	 * @return the customer

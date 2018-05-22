@@ -1,25 +1,56 @@
 package com.sbank.wrappers;
 
+import java.math.BigDecimal;
+
+
+
 import com.sbank.model.RefMoney;
 
 public class BankPermission {
+  /**------------*/
+  private Long Id;
+  /**------------*/
+  private BigDecimal requestamount;
   
+  /**-------------*/
+  /**
+   * 
+   */
   public BankPermission()
   {
     
   }
-  public Long getBankId() {
-    return BankId;
+
+ 
+  /**
+   * @return
+   */
+  public BigDecimal getRequestamount() {
+    return requestamount;
   }
-  public void setBankId(Long bankId) {
-    BankId = bankId;
+
+  
+  /**
+   * @param requestamount
+   */
+  public void setRequestamount(BigDecimal requestamount) {
+    this.requestamount = requestamount;
   }
-  public RefMoney getRef() {
-    return ref;
+ 
+
+  /**
+   * @return
+   */
+  public Long getId() {
+    return Id;
   }
-  public void setRef(RefMoney ref) {
-    this.ref = ref;
+
+
+  /**
+   * @param id
+   */
+  public void setId(Long id) {
+    Id = id;
   }
-  private Long BankId;
-  private RefMoney ref;
+
 }

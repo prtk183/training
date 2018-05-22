@@ -2,7 +2,19 @@ package com.sbank.wrappers;
 
 import java.math.BigDecimal;
 
+
+
 public class WrapperATMWithdraw {
+  
+ private BigDecimal amount;
+ 
+/**--------*/
+  private Long bankId;
+ 
+  /**--------*/
+  private Long atmId;
+  /**--------*/
+  private Long accountId;
   public BigDecimal getAmount() {
     return amount;
   }
@@ -28,8 +40,6 @@ public class WrapperATMWithdraw {
   public void setAccountId(Long accountId) {
     this.accountId = accountId;
   }
-  private BigDecimal amount;
-  private Long bankId;
-  private Long atmId;
-  private Long accountId;
+ 
+ 
 }

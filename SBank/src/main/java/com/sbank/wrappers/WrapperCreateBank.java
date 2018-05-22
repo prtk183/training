@@ -2,12 +2,14 @@ package com.sbank.wrappers;
 
 import java.math.BigDecimal;
 
+
 public class WrapperCreateBank {
   
-  WrapperCreateBank()
+  public WrapperCreateBank()
   {
     
   }
+/**---amount----*/
   BigDecimal amount;
 
 

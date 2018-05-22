@@ -2,13 +2,21 @@ package com.sbank.wrappers;
 
 import java.math.BigDecimal;
 
+
+
 import com.sbank.model.Account;
 import com.sbank.model.Customer;
 
 public class WrapperTransaction {
+  
+  /**customerId*/
   private Long customerId;
+  
+  /**account*/
   private Long account;
+  /**ttype*/
   private String ttype;
+  /**amount*/
   private BigDecimal amount;
   
   

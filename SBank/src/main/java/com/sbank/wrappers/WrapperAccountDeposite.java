@@ -2,7 +2,17 @@ package com.sbank.wrappers;
 
 import java.math.BigDecimal;
 
+
+
 public class WrapperAccountDeposite {
+  /**------------*/
+ private Long accountId;
+ /**------------*/
+  private Long customerId;
+  /**------------*/
+  private Long bankId;
+  /**------------*/
+  private BigDecimal amount;
   
   public Long getAccountId() {
     return accountId;
@@ -28,15 +38,8 @@ public class WrapperAccountDeposite {
   public void setAmount(BigDecimal amount) {
     this.amount = amount;
   }
-  private Long accountId;
-  private Long customerId;
-  private Long bankId;
-  private BigDecimal amount;
-  private Long RefId;
-  public Long getRefId() {
-    return RefId;
-  }
-  public void setRefId(Long refId) {
-    RefId = refId;
-  }
+ 
+ 
+ 
+
 }

@@ -10,9 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-/**
+/** Bank Entity.
  * @author trainee
  *
  */
@@ -22,19 +23,25 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Bank {
 
+
+
+  /**-----bank id as primary key-------*/
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "bank_Id")  Long bankId;
+  
+  /**-----inital amount to create bank -------*/
+  @Column(name = "amount")
+  private BigDecimal amount;
+  
   /**
    * 
    * consutructor
    */
 
-  public Bank(BigDecimal amount) {
+  public Bank(final BigDecimal amount) {
     this.amount = amount;
   }
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "bank_Id")
-  private Long bankId;
 
   public Long getBankId() {
     return bankId;
@@ -44,8 +51,7 @@ public class Bank {
     this.bankId = bankId;
   }
 
-  @Column(name = "amount")
-  private BigDecimal amount;
+ 
 
   /*
    * @return the amount
@@ -66,7 +72,7 @@ public class Bank {
   }
 
   /*
-   * (non-Javadoc)
+   * 
    * 
    * @see java.lang.Object#toString()
    */

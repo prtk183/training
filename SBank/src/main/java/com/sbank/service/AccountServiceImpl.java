@@ -21,32 +21,42 @@ import com.sbank.dao.CustomerRepository;
 import com.sbank.exception.HandleException;
 import com.sbank.model.Account;
 import com.sbank.model.Bank;
+import com.sbank.model.Bank_Denomination;
 import com.sbank.model.Customer;
 import com.sbank.model.Transaction;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
+  /**--------logger log object-------------------*/
   private Logger log = Logger.getLogger(AccountServiceImpl.class.getName());
   
+  /**-----environment variable------.*/
   @Autowired
-  Environment environment;
+ private  Environment environment;
+  
+  /**-------customerServiceImpl object--------.*/
   @Autowired
-  CustomerServiceImpl customerServiceImpl;
+  private CustomerServiceImpl customerServiceImpl;
+  
+  /**-----------bankServiceImpl object------------.*/
   @Autowired
-  BankServiceImpl bankServiceImpl;
+  private BankServiceImpl bankServiceImpl;
+  
+  /**-----------accountRepository object--------------*/
   @Autowired
-  AccountRepository accountRepository;
+  private AccountRepository accountRepository;
+  
+  /**---------------transactionServiceImpl object-----------------.*/
   @Autowired
-  TransactionServiceImpl transactionServiceImpl;
+  private TransactionServiceImpl transactionServiceImpl;
+  
+  /**----------------bankdenominationImpl object----------------------------.*/
   @Autowired
-  BankDenominationImpl bankdenominationImpl;
-  @Autowired
-  RefMoneyServiceImpl refMoneyServiceImpl;
-
-  /**/
-  /*
-   * creating an account
+  private BankDenominationServiceImpl bankdenominationServiceImpl;
+ 
+  /**
+   * creating an account.
    * 
    * @see com.sbank.service.AccountService#createAccount(com.sbank.wrappers.CreateAccountWrapper)
    */
@@ -59,30 +69,32 @@ public class AccountServiceImpl implements AccountService {
 
     if (customerServiceImpl.getCustomer(object.getCustomerId()).getCustomerId()
         .equals(object.getCustomerId())
-        && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())) {
+        && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
+        && object.getAmount().intValue() % 2 == 0 && object.getAmount()!= null) 
+      {
 
-      account.setAmount(object.getAmount());
-      Customer cust = customerServiceImpl.getCustomer(object.getCustomerId());
-      account.setCustomer(cust);
-      Bank bank = bankServiceImpl.getBank(object.getBankId());
-      account.setBank(bank);
+            account.setAmount(object.getAmount());
+            Customer cust = customerServiceImpl.getCustomer(object.getCustomerId());
+            account.setCustomer(cust);
+            Bank bank = bankServiceImpl.getBank(object.getBankId());
+            account.setBank(bank);
 
-      BigDecimal initial = bank.getAmount();
-      BigDecimal updated = initial.add(object.getAmount());
+            BigDecimal initial = bank.getAmount();
+            BigDecimal updated = initial.add(object.getAmount());
 
-      bank.setAmount(updated);
-      bankServiceImpl.updateBank(bank);
-      account = accountRepository.save(account);
-    } else {
-      log.warning(environment.getProperty("301"));
+            bank.setAmount(updated);
+            bankServiceImpl.updateBank(bank);
+            account = accountRepository.save(account);
+      } else {
+            
+        log.warning(environment.getProperty("301"));
       throw new HandleException("301"); // if bank or customer is not
                                                                      // found
     }
     return account;
   }
 
-  /*
-   * get account details of all account
+  /**get account details of all account.
    * 
    * @see com.sbank.service.AccountService#getAccountDetails()
    */
@@ -95,19 +107,22 @@ public class AccountServiceImpl implements AccountService {
     return accountList;
   }
 
-  /*
+  /**deposit amount update account and bank.
    * @parameters: object containing customerid, bankid, accountid and amount to deposit
    * 
    * @return: updated account
    */
   @Override
+  @Transactional
   public Account depositeMoney(final WrapperAccountDeposite object) throws HandleException {
     // TODO Auto-generated method stub
     Account act = null;
     log.info(" in  depositeMoney");
     if (customerServiceImpl.getCustomer(object.getCustomerId()).getCustomerId()
         .equals(object.getCustomerId()) //// checking valid customer and bank
-        && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())) {
+        && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
+        )
+    {
 
       final Bank bank = bankServiceImpl.getBank(object.getBankId());
       act = accountRepository.findById(object.getAccountId()).get();
@@ -116,21 +131,32 @@ public class AccountServiceImpl implements AccountService {
       final BigDecimal initialamountinaccount = act.getAmount();
       final BigDecimal initialamountinbank = bank.getAmount();
 
-      if (object.getAmount().compareTo(val) == 1) {
-        BigDecimal updatedbank = initialamountinbank.add(object.getAmount()); // adding depositing
-                                                                              // into bank
-
-        BigDecimal updatedact = initialamountinaccount.add(object.getAmount()); // adding depositing
-                                                                                // in account
+      if (object.getAmount().compareTo(val) == 1 )
+      {
+       
 
         final BankPermission bpobject = new BankPermission();
-        bpobject.setBankId(object.getBankId());
-        bpobject.setRef(refMoneyServiceImpl.getRef(object.getRefId()));
-        Boolean permmission = bankdenominationImpl.getDenominationPermission(bpobject);
-        if (permmission == true) {
+        bpobject.setId(object.getBankId());
+        bpobject.setRequestamount(val);
+        
+        Boolean permmission = bankdenominationServiceImpl.getDenomination(bpobject).getPermission();
+        
+        if (permmission == true && object.getAmount().intValue()%2==0 ) 
+        {
+          
+          BigDecimal updatedbank = initialamountinbank.add(object.getAmount()); // adding depositing
+          // into bank
+
+          BigDecimal updatedact = initialamountinaccount.add(object.getAmount()); // adding depositing
+            // in account
+          
           act.setAmount(updatedact);
           bank.setAmount(updatedbank);
-          String transactionType = "DEPOSIT";
+          String transactionType = environment.getProperty("1111");
+          
+          Bank_Denomination updatetable = new Bank_Denomination(bankdenominationServiceImpl.getDenomination(bpobject).getDenominations(),
+              bankdenominationServiceImpl.getDenomination(bpobject).getDenominationTable());
+          bankdenominationServiceImpl.upadateDenominations(updatetable);
 
           WrapperTransaction Object = new WrapperTransaction(object.getCustomerId(),
               object.getAccountId(), transactionType, object.getAmount());
@@ -138,6 +164,10 @@ public class AccountServiceImpl implements AccountService {
           final Transaction transaction = transactionServiceImpl.createTransaction(Object);
           accountRepository.saveAndFlush(act);
           bankServiceImpl.updateBank(bank);
+        }
+        else
+        {
+          throw new HandleException(environment.getProperty("701"));
         }
       } else {
         
@@ -152,16 +182,17 @@ public class AccountServiceImpl implements AccountService {
 
   }
 
-  /**/
-  /*
-   * withdraw money from atm--bank--account
+
+  /**withdraw money from atm--bank--account.
    * 
    * @see com.sbank.service.AccountService#withdrawMoney(com.sbank.wrappers.WrapperAccountDeposite)
    */
   @Override
+  @Transactional
   public Account withdrawMoney(final WrapperAccountDeposite object) throws HandleException {
     Account act = null;
     Bank bank = null;
+    BigDecimal val = object.getAmount();
     log.info(" in  withdrawMoney");
     if (bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
         && accountRepository.findById(object.getAccountId()).isPresent()) {
@@ -177,7 +208,7 @@ public class AccountServiceImpl implements AccountService {
               final BigDecimal updatedact = initialamountinaccount.subtract(object.getAmount()); // withdrawing substracting in account
                 act.setAmount(updatedact);
 
-                  final String transactionType = "Withdraw";
+                  final String transactionType = environment.getProperty("2222");
 
                     WrapperTransaction Obj = new WrapperTransaction(object.getCustomerId(),
                     object.getAccountId(), transactionType, object.getAmount());
@@ -194,12 +225,27 @@ public class AccountServiceImpl implements AccountService {
 
       if (initialamountinbank.compareTo(validamount) == 1
           && object.getAmount().compareTo(initialamountinbank) == -1
-          && object.getAmount().compareTo(validamount) == 1) {
+          && object.getAmount().compareTo(validamount) == 1 && object.getAmount().intValue()%2==0) {
 
         BigDecimal updatedbank = initialamountinbank.subtract(object.getAmount()); // withdrawing
                                                                                    // into bank
+        final BankPermission bpobject = new BankPermission();
+        bpobject.setId(object.getBankId());
+        bpobject.setRequestamount(val);
+        
+        Boolean permmission = bankdenominationServiceImpl.getDenomination(bpobject).getPermission();
+        
+        if (permmission == true) 
+        {
+          
         bank.setAmount(updatedbank);
         bankServiceImpl.updateBank(bank);
+       
+        }
+        else
+        {
+          throw new HandleException(environment.getProperty("701"));
+        }
 
       } else {
         log.warning("");
@@ -214,7 +260,7 @@ public class AccountServiceImpl implements AccountService {
 
   }
 
-  /*
+  /**get account details.
    * @parameter long account id
    * 
    * @return account
@@ -227,11 +273,12 @@ public class AccountServiceImpl implements AccountService {
 
   }
 
-  /*
+  /**update account table.
    * @parameter account
    *
    */
   @Override
+  @Transactional
   public void updateAccount(Account account) throws HandleException {
     log.info(" in  updateAccount");
 

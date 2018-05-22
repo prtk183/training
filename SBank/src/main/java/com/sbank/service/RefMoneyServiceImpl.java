@@ -1,5 +1,6 @@
 package com.sbank.service;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +20,25 @@ public class RefMoneyServiceImpl implements RefMoneyService{
   Logger log = Logger.getLogger(RefMoneyServiceImpl.class.getName());
 
   @Override
-  public RefMoney update(RefMoney refMoney) throws HandleException{
+  public  List<Integer> update(Integer currency) throws HandleException{
     
-   
+    List<Integer> take = (List<Integer>) refMoneyRepository.findAll().get(0);
+    take.add(currency);
+    
+    
     log.info("in ref update ");
-    return  refMoneyRepository.save(refMoney);
+    return  (List<Integer>) refMoneyRepository.findAll().get(0);
   }
+  
+  /** getting available table
+   * @see com.sbank.service.RefMoneyService#getRefTable()
+   */
   @Override
-  public RefMoney getRef(Long refId) throws HandleException {
+  public List<Integer> getRefTable() throws HandleException {
 
     
     log.info("in ref get ref update ");
-    return refMoneyRepository.findById(refId).get();
+    return (List<Integer>) refMoneyRepository.findAll().get(0);
   }
 
 }

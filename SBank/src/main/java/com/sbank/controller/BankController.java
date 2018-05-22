@@ -30,15 +30,18 @@ import com.sbank.wrappers.WrapperCreateBank;
 @Controller
 public class BankController {
 
-	
+	/**------------bank service object----------.*/
 	@Autowired
 	BankServiceImpl bankServiceImpl;
+	
+	/**------environment varaible to access appliaction property---.*/
 	@Autowired
   Environment environment;
 	
+	/**------logger ----.*/
 	Logger log = Logger.getLogger(BankController.class.getName());
-	/**
-	 * creating a bank
+	
+	/**creating a bank, passing wrapper class object having some amount as arguments. 
 	 * @param amount
 	 * @return
 	 * @throws HandleException
@@ -59,8 +62,7 @@ public class BankController {
 	
 	
 	
-	/**
-	 *  showing bank details
+	/** showing bank details.
 	 * @return
 	 * @throws HandleException
 	 */

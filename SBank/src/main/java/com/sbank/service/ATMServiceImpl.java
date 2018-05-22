@@ -16,9 +16,12 @@ import com.sbank.model.ATM;
 import com.sbank.model.Account;
 import com.sbank.model.Atm_Denomination;
 import com.sbank.model.Bank;
+import com.sbank.model.Bank_Denomination;
+import com.sbank.wrappers.BankPermission;
 import com.sbank.wrappers.WrapperATMAddMoneyToATM;
 import com.sbank.wrappers.WrapperATMCreate;
 import com.sbank.wrappers.WrapperATMWithdraw;
+import com.sbank.wrappers.WrapperDenomination;
 
 /**
  * @author hp
@@ -35,7 +38,7 @@ public class ATMServiceImpl implements ATMService {
   AccountServiceImpl accountServiceImpl;
   
   @Autowired
-  AtmDenominationImpl atmDenominationImpl;
+  AtmDenominationServiceImpl atmDenominationServiceImpl;
   
   @Autowired
   Environment environment;
@@ -126,9 +129,19 @@ log.info("in atm service creating atm");
                           && object.getAmount().compareTo(validamount)==1 )   //validating wrt to account
                           {
                             account.setAmount(account.getAmount().subtract(object.getAmount()));
-                                                       
-                            Atm_Denomination permission = atmDenominationImpl.giveDenomination(object.getAtmId(), object.getAmount());
                             
+                            BankPermission PObject = new BankPermission();
+                            PObject.setId(object.getAtmId());
+                            PObject.setRequestamount(object.getAmount());
+                                                       
+                            WrapperDenomination permission = atmDenominationServiceImpl.getDenomination(PObject);
+                            
+                            Atm_Denomination updatetable = new Atm_Denomination(atmDenominationServiceImpl.getDenomination(PObject).getDenominations(),
+                                atmDenominationServiceImpl.getDenomination(PObject).getDenominationTable());
+                            atmDenominationServiceImpl.upadateDenominations(updatetable);
+                            
+                            
+          
                             if(permission.getPermission()==true)
                             {
                            

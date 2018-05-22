@@ -57,9 +57,9 @@ public class CustomerController {
   addOneCustomer(@RequestBody WrapperClass wrapperClass) throws HandleException {
 
     Log.info("calling comtroller create customer");
-    final Bank b = bankServiceImpl.getBank(wrapperClass.bankId);
+    final Bank bank = bankServiceImpl.getBank(wrapperClass.bankId);
     final Customer cust = wrapperClass.customer;
-    cust.setBankId(b);
+    cust.setBankId(bank);
     final Customer result = customerServiceImpl.createCustomer(cust);
     if(result!=null)
 

@@ -1,6 +1,7 @@
-/*package com.sbank.tests;
+package com.sbank.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -11,51 +12,80 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.sbank.SBankApplication;
 import com.sbank.controller.BankController;
+import com.sbank.dao.BankRepository;
+import com.sbank.exception.HandleException;
 import com.sbank.model.Bank;
+import com.sbank.service.BankServiceImpl;
+import com.sbank.wrappers.WrapperCreateBank;
+
 import org.springframework.test.context.junit4.SpringRunner;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
+@ComponentScan("application.properties")
 public class BankTestCase {
 
- 
+  @Mock
+  BankRepository bankRepository;
+  
   @Autowired
-  private MockMvc mockMvc;
+  Environment environment;
   
-   SBankApplication sbankApplication = new SBankApplication();
-  
-  @Test
-  public void checkBankCreation() throws Exception
-  {
-    BigDecimal amount = new BigDecimal(0);
-            this.mockMvc.perform(post("/createbank"))
-            .body(amount).andDo(print()).andExpect(status().isOk());
-            
-            this.mockMvc.perform(post("/createbank")).contentType(IntegrationTestUtil.APPLICATION_JSON_UTF8)
-            .body(IntegrationTestUtil.convertObjectToJsonBytes(amount)).andDo(print()).andExpect(status().isOk());
-    
-  }
+  @InjectMocks
+  BankServiceImpl bankserviceimpl;
   
   @Test
-  public void checkGetDetails()
+  public void TestCreateBankSuccess() throws HandleException
   {
-    ResponseEntity<List<Bank>> allBanks=  bankController.getBankDetails();
+    WrapperCreateBank object = new WrapperCreateBank();
+    object.setAmount(new BigDecimal(1000));
     
-   int num = allBanks.getBody().size();
+    Bank bank=new Bank(new BigDecimal(1000));
     
-    assertEquals("equals Record found",num,1);
+    when(bankRepository.save(Mockito.<Bank>any())).thenReturn(bank);
+    assertEquals(bankserviceimpl.createBank(object).getAmount(),new BigDecimal(1000));
+  }
+  
+  /*@Test
+  public void TestCreateBankFailure() throws HandleException
+  {
+    WrapperCreateBank object = new WrapperCreateBank();
+    object.setAmount(new BigDecimal(100));
+    
+    Bank bank=new Bank(new BigDecimal(1000));
+    
+    when(bankRepository.save(Mockito.<Bank>any())).thenReturn(bank);
+    assertEquals(bankserviceimpl.createBank(object).getAmount(),new BigDecimal(1000));
+  }*/
+  
+  @Test(expected=HandleException.class)
+  public void TestBankException() throws HandleException {
+    WrapperCreateBank object = new WrapperCreateBank();
+    object.setAmount(new BigDecimal(-100));
+    
+    Bank bank=new Bank(new BigDecimal(-100));
+    when(bankserviceimpl.createBank(object)).thenThrow(new HandleException("initial amount cannot be in -ve "));
     
   }
+
+
   
 }
-*/
+
+
+
+
