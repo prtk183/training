@@ -1,4 +1,4 @@
-package com.sbank.service;
+/*package com.sbank.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,18 +11,19 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sbank.dao.AtmDenominationRepository;
 import com.sbank.dao.BankDenominationRepository;
 import com.sbank.exception.HandleException;
 import com.sbank.model.Atm_Denomination;
 import com.sbank.model.Bank;
 import com.sbank.model.Bank_Denomination;
-import com.sbank.wrappers.BankPermission;
 import com.sbank.wrappers.WrapperDenomination;
+import com.sbank.wrappers.WrapperRequestObject;
 
 @Service
 public class BankDenominationServiceImpl implements DenominationService{
 
-  /**-------bankServiceImpl object-----.*/
+  *//**-------bankServiceImpl object-----.*//*
   @Autowired 
   BankServiceImpl bankServiceImpl;
   
@@ -30,19 +31,22 @@ public class BankDenominationServiceImpl implements DenominationService{
   BankDenominationRepository bankDenominationRepository;
   
   @Autowired
+  AtmDenominationRepository atmDenominationRepository;
+  
+  @Autowired
   RefMoneyServiceImpl refMoneyServiceImpl;
   
-  /** getting requestamount and bank id and returrning the denomination with its count.
+  *//** getting requestamount and bank id and returrning the denomination with its count.
    * @see com.sbank.service.DenominationService#
    * \t getDenominationPermission(com.sbank.wrappers.BankPermission)
-   */
+   *//*
   @Override
-  public WrapperDenomination getDenomination(BankPermission object) throws HandleException {
+  public WrapperDenomination getDenomination(WrapperRequestObject object) throws HandleException {
    
-    /**-------result -------.*/
+    *//**-------result -------.*//*
     WrapperDenomination result=null;
     
-    /**--------denomination table--------.*/
+    *//**--------denomination table--------.*//*
     Map<Integer, Integer> denomtable = new HashMap<Integer, Integer>(6);
     
     List<Integer> availableDenomination = new ArrayList<Integer>(6);
@@ -56,9 +60,7 @@ public class BankDenominationServiceImpl implements DenominationService{
     if(object.getRequestamount()!=null && object.getId()!=null)
     {
       
-      final Bank bank = bankServiceImpl.getBank(object.getId());
-        if(bank!=null)
-        {
+    
           
             Integer amount = object.getRequestamount().intValue();
           
@@ -103,21 +105,17 @@ public class BankDenominationServiceImpl implements DenominationService{
           throw new HandleException("Bank not found");
         }
       
-    }
-    else
-    {
-      throw new HandleException("amount or bank id is not valid");
-    }
+    
    
     
   }
 
-  /**
+  *//**
    * 
    *
    * (non-Javadoc)
    * @see com.sbank.service.DenominationService#upadateDenominations(com.sbank.wrappers.WrapperDenomination)
-   */
+   *//*
   @Override
   public void upadateDenominations(Bank_Denomination object) throws HandleException {
     
@@ -126,8 +124,13 @@ public class BankDenominationServiceImpl implements DenominationService{
 
   @Override
   public void upadateDenominations(Atm_Denomination object) throws HandleException {
-    // TODO Auto-generated method stub
+    
+    atmDenominationRepository.save(object);
+    
     
   }
 
+
+
 }
+*/

@@ -39,50 +39,46 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ComponentScan("application.properties")
 public class BankTestCase {
 
+  /**-------bankRepository to  mock-------------.*/
   @Mock
-  BankRepository bankRepository;
+  private BankRepository bankRepository;
   
+  /**---------environment---------.*/
   @Autowired
-  Environment environment;
+  private Environment environment;
   
+  /**----------bankserviceimpl to use -----------------.*/
   @InjectMocks
   BankServiceImpl bankserviceimpl;
   
   @Test
-  public void TestCreateBankSuccess() throws HandleException
+  public void testCreateBankSuccess() throws HandleException
   {
-    WrapperCreateBank object = new WrapperCreateBank();
+    final WrapperCreateBank object = new WrapperCreateBank();
     object.setAmount(new BigDecimal(1000));
     
-    Bank bank=new Bank(new BigDecimal(1000));
+    final Bank bank=new Bank(new BigDecimal(1000));
     
     when(bankRepository.save(Mockito.<Bank>any())).thenReturn(bank);
     assertEquals(bankserviceimpl.createBank(object).getAmount(),new BigDecimal(1000));
   }
   
-  /*@Test
-  public void TestCreateBankFailure() throws HandleException
-  {
-    WrapperCreateBank object = new WrapperCreateBank();
-    object.setAmount(new BigDecimal(100));
-    
-    Bank bank=new Bank(new BigDecimal(1000));
-    
-    when(bankRepository.save(Mockito.<Bank>any())).thenReturn(bank);
-    assertEquals(bankserviceimpl.createBank(object).getAmount(),new BigDecimal(1000));
-  }*/
   
+  @Test(expected=Exception.class)
+  public void testBankException() throws HandleException {
+    final WrapperCreateBank object = new WrapperCreateBank();
+    object.setAmount(null);
+    when(bankserviceimpl.createBank(object)).thenThrow(new Exception("java.lang.NullPointerException "));
+    
+  }
+
   @Test(expected=HandleException.class)
-  public void TestBankException() throws HandleException {
-    WrapperCreateBank object = new WrapperCreateBank();
-    object.setAmount(new BigDecimal(-100));
-    
-    Bank bank=new Bank(new BigDecimal(-100));
-    when(bankserviceimpl.createBank(object)).thenThrow(new HandleException("initial amount cannot be in -ve "));
+  public void testBankHandleException() throws HandleException {
+    final WrapperCreateBank object = new WrapperCreateBank();
+    object.setAmount(null);
+    when(bankserviceimpl.createBank(object)).thenThrow(new HandleException(environment.getProperty("101")));
     
   }
-
-
   
 }
 

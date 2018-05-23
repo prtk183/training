@@ -20,33 +20,42 @@ import com.sbank.wrappers.WrapperTransaction;
 @Service
 public class TransactionServiceImpl implements TransactionService{
 
+  /**----------accountServiceImpl object--------------.*/
   @Autowired
   private AccountServiceImpl accountServiceImpl;
+  
+  /**----------------customerServiceImpl object------------------------.*/
   @Autowired
   private CustomerServiceImpl customerServiceImpl;
+  
+  /**----------------transactionRepository object---------------------.*/
   @Autowired
   private TransactionRepository transactionRepository;
   
+  /**--------------------environment object--------------------*/
   @Autowired
   Environment environment;
   
+  /**----------------log object------------------.*/
   Logger log = Logger.getLogger(TransactionServiceImpl.class.getName());
   /**/
   /* create transaction
    * @see com.sbank.service.TransactionService#createTransaction(com.sbank.wrappers.WrapperTransaction)
    */
   @Override
-  public Transaction createTransaction(WrapperTransaction obj) throws HandleException {
+  public Transaction createTransaction(final WrapperTransaction obj) throws HandleException {
     log.info("in trnsaction service createTransaction ");
+  if(obj.getAccount()!=null && obj.getAmount()!=null && obj.getCustomerId()!=null)
+  {
     if(accountServiceImpl.getAccountDetail(obj.getAccount()).getAccountId().equals(obj.getAccount())) //validating account
     {
          Account account  = accountServiceImpl.getAccountDetail(obj.getAccount());
          
            if(customerServiceImpl.getCustomer(obj.getCustomerId()).getCustomerId().equals(obj.getCustomerId()))   //validating customer
            {
-             Customer customer = customerServiceImpl.getCustomer(obj.getCustomerId());
+             final Customer customer = customerServiceImpl.getCustomer(obj.getCustomerId());
              
-             String ttype= obj.getTtype();
+             final String ttype= obj.getTtype();
              Transaction tax= new Transaction();
     
              tax.setAccount(account);     
@@ -64,6 +73,10 @@ public class TransactionServiceImpl implements TransactionService{
     }  else {
       throw new HandleException(environment.getProperty("502"));
     }
+  } else {
+    throw new HandleException(environment.getProperty("7777"));
+
+  }
   }
 
   /**/
@@ -71,42 +84,60 @@ public class TransactionServiceImpl implements TransactionService{
    * @see com.sbank.service.TransactionService#generteTransactionReport(com.sbank.wrappers.WrapperTransaction)
    */
   @Override
-  public List<Transaction> generteTransactionReport(Long accountId) throws HandleException {
+  public List<Transaction> generteTransactionReport(final Long accountId) throws HandleException {
     log.info("in trnsaction service generteTransactionReport");
-    List<Transaction> TransactionList  = transactionRepository.findAll();
+ if(accountId!=null)
+ {
+    List<Transaction> transactionList  = transactionRepository.findAll();
    
-    List<Transaction> TransactionReportForById= new ArrayList<Transaction>();
-    System.out.println(TransactionList);
+    List<Transaction> transactionReportForById= new ArrayList<Transaction>();
+    System.out.println(transactionList);
     System.out.println("above loop");
   //  System.out.println("a+"+ts.getAccount().getAccountId());
     System.out.println("b+"+accountId);
-    for(Transaction ts :TransactionList)
+    for(Transaction ts :transactionList)
     {
       int i=0;
       if(ts.getAccount().getAccountId().equals(accountId))     //fetching transaction record for an account id
       {
     
-            TransactionReportForById.add(transactionRepository.findById(ts.getTransactionId()).get());
+        transactionReportForById.add(transactionRepository.findById(ts.getTransactionId()).get());
     
       }
       System.out.println("yttreresdf"+i++);
     }
-    System.out.println("totalList"+TransactionReportForById);
-    if(TransactionReportForById.isEmpty())
+    System.out.println("totalList"+transactionReportForById);
+    if(transactionReportForById.isEmpty())
     {
       throw new HandleException(environment.getProperty("500"));
     }
     else
     {
-       return TransactionReportForById;
+       return transactionReportForById;
     }
+ }
+ else
+ {
+   throw new HandleException(environment.getProperty("7777"));
+
+ }
   }
 
   @Override
-  public Transaction getTransaction(Long transactionId) throws HandleException {
+  public Transaction getTransaction(final Long transactionId) throws HandleException {
     log.info("in trnsaction service getTransaction");
+    if(transactionId!=null)
+    {
     Transaction Tax = transactionRepository.findById(transactionId).get();
     return Tax;
+    
+    }
+    else
+    {
+      throw new HandleException(environment.getProperty("7777"));
+
+    }
   }
+
 
 }

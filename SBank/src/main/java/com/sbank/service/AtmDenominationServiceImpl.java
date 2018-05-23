@@ -1,4 +1,4 @@
-package com.sbank.service;
+/*package com.sbank.service;
 
 import java.math.BigDecimal;
 
@@ -19,13 +19,12 @@ import org.springframework.stereotype.Service;
 import com.sbank.exception.HandleException;
 import com.sbank.model.Bank;
 import com.sbank.model.Bank_Denomination;
-import com.sbank.wrappers.BankPermission;
 import com.sbank.wrappers.WrapperDenomination;
 
 @Service
-public class AtmDenominationServiceImpl implements DenominationService {
+public class AtmDenominationServiceImpl extends BankDenominationServiceImpl {
 
-  /**-------bankServiceImpl object-----.*/
+  *//**-------bankServiceImpl object-----.*//*
   @Autowired 
  ATMServiceImpl AtmServiceImpl;
   
@@ -35,17 +34,17 @@ public class AtmDenominationServiceImpl implements DenominationService {
   @Autowired
   AtmDenominationRepository atmDenominationRepository;
   
-  /** getting requestamount and bank id and returrning the denomination with its count.
+  *//** getting requestamount and bank id and returrning the denomination with its count.
    * @see com.sbank.service.DenominationService#
    * \t getDenominationPermission(com.sbank.wrappers.BankPermission)
-   */
+   *//*
   @Override
   public WrapperDenomination getDenomination(BankPermission object) throws HandleException {
    
-    /**-------result -------.*/
+    *//**-------result -------.*//*
     WrapperDenomination result=null;
     
-    /**--------denomination table--------.*/
+    *//**--------denomination table--------.*//*
     Map<Integer, Integer> denomtable = new HashMap<Integer, Integer>(6);
     
     List<Integer> availableDenomination = new ArrayList<Integer>(6);
@@ -59,10 +58,7 @@ public class AtmDenominationServiceImpl implements DenominationService {
     if(object.getRequestamount()!=null && object.getId()!=null)
     {
       
-      final ATM atm = AtmServiceImpl.getAtm(object.getId());
-        if(atm!=null)
-        {
-          
+      
             Integer amount = object.getRequestamount().intValue();
           
             Collections.copy(availableDenomination, denomination);
@@ -104,30 +100,11 @@ public class AtmDenominationServiceImpl implements DenominationService {
         }
       
     }
-    else
-    {
-      throw new HandleException("amount or ATM id is not valid");
-    }
-   
-    
-  }
-
   
-
-  public void upadateDenominations(Atm_Denomination updatetable) throws HandleException{
-    // TODO Auto-generated method stub
    
-    atmDenominationRepository.save(updatetable);
-  }
 
-
-
-  @Override
-  public void upadateDenominations(Bank_Denomination object) throws HandleException {
-    // TODO Auto-generated method stub
-    
-  }
 
 
 
 }
+*/

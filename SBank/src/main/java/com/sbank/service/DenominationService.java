@@ -1,4 +1,4 @@
-package com.sbank.service;
+/*package com.sbank.service;
 
 import java.util.Map;
 
@@ -6,13 +6,13 @@ import com.sbank.exception.HandleException;
 import com.sbank.model.Atm_Denomination;
 import com.sbank.model.Bank_Denomination;
 import com.sbank.model.RefMoney;
-import com.sbank.wrappers.BankPermission;
 import com.sbank.wrappers.WrapperDenomination;
+import com.sbank.wrappers.WrapperRequestObject;
 
 public interface DenominationService {
 
 
-  WrapperDenomination getDenomination(BankPermission object) throws HandleException;
+  WrapperDenomination getDenomination(WrapperRequestObject object) throws HandleException;
   
   void upadateDenominations(Bank_Denomination object) throws HandleException;
   
@@ -20,3 +20,4 @@ public interface DenominationService {
 
   
 }
+*/

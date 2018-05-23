@@ -71,6 +71,14 @@ public class Bank {
   public Bank() {
   }
 
+  
+  
+  public Bank(Long bankId, BigDecimal amount) {
+    super();
+    this.bankId = bankId;
+    this.amount = amount;
+  }
+
   /*
    * 
    * 

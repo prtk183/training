@@ -1,4 +1,4 @@
-package com.sbank.model;
+/*package com.sbank.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,33 +13,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 public class RefMoney {
-  
- /**------RefMoneyId----------*/
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long RefMoneyId;
+  private Long refId;
   
-  /**--------availableDenomination---------*/
   @ElementCollection
-  private List<Integer> availableDenomination = new ArrayList();
+  private List<Integer> currency;
   
- 
+  private Integer bankId;
   
-  public RefMoney()
-  {
-    
-  }
-  
-  public List<Integer> getAvailableDenomination() {
-    return availableDenomination;
+  private Integer atmId;
+   
+  public List<Integer> getCurrency() {
+    return currency;
   }
 
-  public void setAvailableDenomination(List<Integer> availableDenomination) {
-    this.availableDenomination = availableDenomination;
+  public void setCurrency(List<Integer> currency) {
+    this.currency = currency;
+  }
+
+  public Integer getBankId() {
+    return bankId;
+  }
+
+  public void setBankId(Integer bankId) {
+    this.bankId = bankId;
+  }
+
+  public Integer getAtmId() {
+    return atmId;
+  }
+
+  public void setAtmId(Integer atmId) {
+    this.atmId = atmId;
   }
 
 
-  
-  
-  
-}
+  public Long getRefId() {
+    return refId;
+  }
+
+  public void setRefId(Long refId) {
+    this.refId = refId;
+  }
+
+}*/

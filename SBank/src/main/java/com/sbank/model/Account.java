@@ -41,6 +41,18 @@ public class Account {
   
   
   
+  public Account(Long accountId, BigDecimal amount, Bank bank, Customer customer) {
+    super();
+    this.accountId = accountId;
+    this.amount = amount;
+    this.bank = bank;
+    this.customer = customer;
+  }
+
+  public Account() {
+    // TODO Auto-generated constructor stub
+  }
+
   public Long getAccountId() {
     return accountId;
   }

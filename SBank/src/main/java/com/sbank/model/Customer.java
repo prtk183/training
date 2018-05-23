@@ -43,6 +43,14 @@ public class Customer {
   }
   
   
+  public Customer(Long customerId, String customerName, Integer pin, Bank bank) {
+    super();
+    this.customerId = customerId;
+    this.customerName = customerName;
+    this.pin = pin;
+    this.bank = bank;
+  }
+
   @Override
   public String toString() {
     return "Customer [customerId=" + customerId + ", customerName=" + customerName + ", pin=" + pin

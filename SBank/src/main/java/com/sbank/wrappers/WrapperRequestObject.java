@@ -1,12 +1,12 @@
 package com.sbank.wrappers;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
+//import com.sbank.model.RefMoney;
 
-
-import com.sbank.model.RefMoney;
-
-public class BankPermission {
+public class WrapperRequestObject {
   /**------------*/
   private Long Id;
   /**------------*/
@@ -16,12 +16,15 @@ public class BankPermission {
   /**
    * 
    */
-  public BankPermission()
+  public WrapperRequestObject()
   {
     
   }
 
  
+
+
+
   /**
    * @return
    */

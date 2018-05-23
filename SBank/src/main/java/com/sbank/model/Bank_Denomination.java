@@ -1,4 +1,4 @@
-package com.sbank.model;
+/*package com.sbank.model;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Bank_Denomination {
-  /**------------*/
+  *//**------------*//*
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long bankdenominationref;
@@ -53,3 +53,4 @@ public class Bank_Denomination {
 
  
 }
+*/

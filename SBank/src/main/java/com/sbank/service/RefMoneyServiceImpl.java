@@ -1,4 +1,4 @@
-package com.sbank.service;
+/*package com.sbank.service;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -20,9 +20,10 @@ public class RefMoneyServiceImpl implements RefMoneyService{
   Logger log = Logger.getLogger(RefMoneyServiceImpl.class.getName());
 
   @Override
-  public  List<Integer> update(Integer currency) throws HandleException{
+  public  List<Integer> update(RefMoney refMoney) throws HandleException{
     
     List<Integer> take = (List<Integer>) refMoneyRepository.findAll().get(0);
+    
     take.add(currency);
     
     
@@ -30,9 +31,9 @@ public class RefMoneyServiceImpl implements RefMoneyService{
     return  (List<Integer>) refMoneyRepository.findAll().get(0);
   }
   
-  /** getting available table
+  *//** getting available table
    * @see com.sbank.service.RefMoneyService#getRefTable()
-   */
+   *//*
   @Override
   public List<Integer> getRefTable() throws HandleException {
 
@@ -42,3 +43,4 @@ public class RefMoneyServiceImpl implements RefMoneyService{
   }
 
 }
+*/

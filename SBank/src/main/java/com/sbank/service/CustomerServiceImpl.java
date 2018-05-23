@@ -22,15 +22,21 @@ import com.sbank.model.Customer;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+  /**------------customerRepository object-----------------.*/
 	@Autowired
 	private CustomerRepository customerRepository;
 	
+	/**----------Log---------------.*/
   Logger Log = Logger.getLogger(CustomerServiceImpl.class.getName());
   
+  /**------------environment-----------------.*/
   @Autowired
-  Environment environment;
-	 @Autowired
-	  BankServiceImpl bankServiceImpl;
+  private Environment environment;
+  
+	/**----------------bankServiceImpl--------------------------.*/ 
+  @Autowired
+	 private BankServiceImpl bankServiceImpl;
+  
 	/**/
 	/* crating customer with id, pi, name and bankid
 	 * @see com.sbank.service.CustomerService#createCustomer(com.sbank.model.Customer)
@@ -38,13 +44,12 @@ public class CustomerServiceImpl implements CustomerService {
 	@SuppressWarnings("unlikely-arg-type")
   @Override
 	public Customer createCustomer(Customer customer) throws HandleException {
-	  Customer addNewCustomer =null;
-	Log.info("in customer service calling createCustomer");
 	  
-	   Bank bid=customer.getBank();
-	   Long id = bid.getBankId();
-	   System.out.println("search in db "+bankServiceImpl.getBank(customer.getBank().getBankId()));
-	   System.out.println("id in object"+customer.getBank().getBankId());
+	  Customer addNewCustomer =null;
+	  Log.info("in customer service calling createCustomer");
+	  
+	  if(customer!=null && customer.getBank()!=null && customer.getCustomerId()!=null )
+	  {
 	    
 	  if(( bankServiceImpl.getBank(customer.getBank().getBankId()).getBankId()
 	      .equals(customer.getBank().getBankId()) )) //cheking valid bank in argument 
@@ -60,6 +65,10 @@ public class CustomerServiceImpl implements CustomerService {
 	    } else {
 	      throw new HandleException(environment.getProperty("202")); 
 	    }
+	  } else {
+      throw new HandleException(environment.getProperty("7777")); 
+
+	  }
 	}
 
 
@@ -93,7 +102,7 @@ public class CustomerServiceImpl implements CustomerService {
    * @see com.sbank.service.CustomerService#getCustomer(java.lang.Long)
    */
   @Override
-  public Customer getCustomer(Long customerId) throws HandleException {
+  public Customer getCustomer(final Long customerId) throws HandleException {
     Log.info("in customer service calling getCustomer");
     Optional op;
     Customer customer=null;

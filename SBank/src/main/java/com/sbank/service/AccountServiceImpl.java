@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.SystemPropertyUtils;
 
-import com.sbank.wrappers.BankPermission;
+
 import com.sbank.wrappers.CreateAccountWrapper;
 import com.sbank.wrappers.WrapperAccountDeposite;
+import com.sbank.wrappers.WrapperRequestObject;
 import com.sbank.wrappers.WrapperTransaction;
 import com.sbank.dao.AccountRepository;
 import com.sbank.dao.BankRepository;
@@ -21,7 +22,7 @@ import com.sbank.dao.CustomerRepository;
 import com.sbank.exception.HandleException;
 import com.sbank.model.Account;
 import com.sbank.model.Bank;
-import com.sbank.model.Bank_Denomination;
+//import com.sbank.model.Bank_Denomination;
 import com.sbank.model.Customer;
 import com.sbank.model.Transaction;
 
@@ -52,8 +53,8 @@ public class AccountServiceImpl implements AccountService {
   private TransactionServiceImpl transactionServiceImpl;
   
   /**----------------bankdenominationImpl object----------------------------.*/
-  @Autowired
-  private BankDenominationServiceImpl bankdenominationServiceImpl;
+  //@Autowired
+  //private BankDenominationServiceImpl bankdenominationServiceImpl;
  
   /**
    * creating an account.
@@ -66,11 +67,12 @@ public class AccountServiceImpl implements AccountService {
     log.info(" in creating account");
 
     Account account = new Account();
-
+if(object.getBankId()!=null && object.getAmount()!= null)
+{
     if (customerServiceImpl.getCustomer(object.getCustomerId()).getCustomerId()
         .equals(object.getCustomerId())
         && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
-        && object.getAmount().intValue() % 2 == 0 && object.getAmount()!= null) 
+        && object.getAmount().intValue() % 2 == 0 ) 
       {
 
             account.setAmount(object.getAmount());
@@ -85,13 +87,19 @@ public class AccountServiceImpl implements AccountService {
             bank.setAmount(updated);
             bankServiceImpl.updateBank(bank);
             account = accountRepository.save(account);
+            return account;
       } else {
             
         log.warning(environment.getProperty("301"));
       throw new HandleException("301"); // if bank or customer is not
                                                                      // found
     }
-    return account;
+    
+}
+else
+{
+  throw new HandleException("7777");
+}
   }
 
   /**get account details of all account.
@@ -118,69 +126,72 @@ public class AccountServiceImpl implements AccountService {
     // TODO Auto-generated method stub
     Account act = null;
     log.info(" in  depositeMoney");
-    if (customerServiceImpl.getCustomer(object.getCustomerId()).getCustomerId()
+ if(object.getAccountId()!=null && object.getAmount()!=null && object.getBankId()!=null && object.getCustomerId()!=null)
+{
+      if (customerServiceImpl.getCustomer(object.getCustomerId()).getCustomerId()
         .equals(object.getCustomerId()) //// checking valid customer and bank
-        && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
-        )
-    {
-
-      final Bank bank = bankServiceImpl.getBank(object.getBankId());
-      act = accountRepository.findById(object.getAccountId()).get();
-
-      final BigDecimal val = new BigDecimal(100);
-      final BigDecimal initialamountinaccount = act.getAmount();
-      final BigDecimal initialamountinbank = bank.getAmount();
-
-      if (object.getAmount().compareTo(val) == 1 )
+        && bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId()))
       {
+
+          final Bank bank = bankServiceImpl.getBank(object.getBankId());
+          act = accountRepository.findById(object.getAccountId()).get();
+
+          final BigDecimal val = new BigDecimal(100);
+          final BigDecimal initialamountinaccount = act.getAmount();
+          final BigDecimal initialamountinbank = bank.getAmount();
+
+            if (object.getAmount().compareTo(val) == 1 )
+             {
        
-
-        final BankPermission bpobject = new BankPermission();
-        bpobject.setId(object.getBankId());
-        bpobject.setRequestamount(val);
+                final WrapperRequestObject bpobject = new WrapperRequestObject();
+                bpobject.setId(object.getBankId());
+                bpobject.setRequestamount(val);
         
-        Boolean permmission = bankdenominationServiceImpl.getDenomination(bpobject).getPermission();
-        
-        if (permmission == true && object.getAmount().intValue()%2==0 ) 
-        {
+                // Boolean permmission = bankdenominationServiceImpl.getDenomination(bpobject).getPermission();
+                //permmission == true && it was in if condition
+                  if ( object.getAmount().intValue()%2==0 ) 
+                  {
           
-          BigDecimal updatedbank = initialamountinbank.add(object.getAmount()); // adding depositing
-          // into bank
+                      BigDecimal updatedbank = initialamountinbank.add(object.getAmount()); // adding depositing
+                      // into bank
 
-          BigDecimal updatedact = initialamountinaccount.add(object.getAmount()); // adding depositing
-            // in account
+                      BigDecimal updatedact = initialamountinaccount.add(object.getAmount()); // adding depositing
+                      // in account
           
-          act.setAmount(updatedact);
-          bank.setAmount(updatedbank);
-          String transactionType = environment.getProperty("1111");
+                      act.setAmount(updatedact);
+                      bank.setAmount(updatedbank);
+                      String transactionType = environment.getProperty("1111");
+         
+                      /*  was updating bank denominationtable 
+                        Bank_Denomination updatetable = new Bank_Denomination(bankdenominationServiceImpl.getDenomination(bpobject).getDenominations(),
+                        bankdenominationServiceImpl.getDenomination(bpobject).getDenominationTable());
+                        bankdenominationServiceImpl.upadateDenominations(updatetable);
+                      */
           
-          Bank_Denomination updatetable = new Bank_Denomination(bankdenominationServiceImpl.getDenomination(bpobject).getDenominations(),
-              bankdenominationServiceImpl.getDenomination(bpobject).getDenominationTable());
-          bankdenominationServiceImpl.upadateDenominations(updatetable);
+                      WrapperTransaction Object = new WrapperTransaction(object.getCustomerId(),
+                          object.getAccountId(), transactionType, object.getAmount());
 
-          WrapperTransaction Object = new WrapperTransaction(object.getCustomerId(),
-              object.getAccountId(), transactionType, object.getAmount());
-
-          final Transaction transaction = transactionServiceImpl.createTransaction(Object);
-          accountRepository.saveAndFlush(act);
-          bankServiceImpl.updateBank(bank);
-        }
-        else
-        {
-          throw new HandleException(environment.getProperty("701"));
-        }
+                      final Transaction transaction = transactionServiceImpl.createTransaction(Object);
+                      
+                      accountRepository.saveAndFlush(act);
+                      bankServiceImpl.updateBank(bank);
+                      return act;
+                  } else {
+                        throw new HandleException(environment.getProperty("701"));
+                  }
+             } else {
+                       throw new HandleException(environment.getProperty("302"));
+             }
       } else {
-        
-        throw new HandleException(environment.getProperty("302"));
+          throw new HandleException(environment.getProperty("300"));
       }
-    } else {
-     
-      throw new HandleException(environment.getProperty("300"));
-    }
 
-    return act;
+    
+} else {
+   throw new HandleException(environment.getProperty("7777"));
+}
 
-  }
+}
 
 
   /**withdraw money from atm--bank--account.
@@ -194,69 +205,73 @@ public class AccountServiceImpl implements AccountService {
     Bank bank = null;
     BigDecimal val = object.getAmount();
     log.info(" in  withdrawMoney");
-    if (bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
-        && accountRepository.findById(object.getAccountId()).isPresent()) {
-
-      bank = bankServiceImpl.getBank(object.getBankId());
-      act = accountRepository.findById(object.getAccountId()).get();
-
-      BigDecimal initialamountinaccount = act.getAmount();
-      BigDecimal validamount = new BigDecimal(100);
-
-          if ((object.getAmount().compareTo(initialamountinaccount) == -1  || object.getAmount().compareTo(initialamountinaccount) == 0)
-                && object.getAmount().compareTo(validamount) == 1) {
-              final BigDecimal updatedact = initialamountinaccount.subtract(object.getAmount()); // withdrawing substracting in account
-                act.setAmount(updatedact);
-
-                  final String transactionType = environment.getProperty("2222");
-
-                    WrapperTransaction Obj = new WrapperTransaction(object.getCustomerId(),
-                    object.getAccountId(), transactionType, object.getAmount());
-
-                      transactionServiceImpl.createTransaction(Obj);
-
-                      accountRepository.saveAndFlush(act);
-            } else {
-     
-                    throw new HandleException(environment.getProperty("303"));
-                  }
-
-      final BigDecimal initialamountinbank = bank.getAmount();
-
-      if (initialamountinbank.compareTo(validamount) == 1
-          && object.getAmount().compareTo(initialamountinbank) == -1
-          && object.getAmount().compareTo(validamount) == 1 && object.getAmount().intValue()%2==0) {
-
-        BigDecimal updatedbank = initialamountinbank.subtract(object.getAmount()); // withdrawing
-                                                                                   // into bank
-        final BankPermission bpobject = new BankPermission();
-        bpobject.setId(object.getBankId());
-        bpobject.setRequestamount(val);
-        
-        Boolean permmission = bankdenominationServiceImpl.getDenomination(bpobject).getPermission();
-        
-        if (permmission == true) 
-        {
+    
+    if(object.getAccountId()!=null && object.getAmount()!=null && object.getBankId()!=null && object.getCustomerId()!=null)
+    {
           
-        bank.setAmount(updatedbank);
-        bankServiceImpl.updateBank(bank);
-       
-        }
-        else
+        if (bankServiceImpl.getBank(object.getBankId()).getBankId().equals(object.getBankId())
+                && accountRepository.findById(object.getAccountId()).isPresent()) 
         {
-          throw new HandleException(environment.getProperty("701"));
+            bank = bankServiceImpl.getBank(object.getBankId());
+            act = accountRepository.findById(object.getAccountId()).get();
+
+            BigDecimal initialamountinaccount = act.getAmount();
+            BigDecimal validamount = new BigDecimal(100);
+
+         // withdrawing substracting in account
+            if ((object.getAmount().compareTo(initialamountinaccount) == -1  || object.getAmount().compareTo(initialamountinaccount) == 0)
+                && object.getAmount().compareTo(validamount) == 1) 
+            {
+                final BigDecimal updatedact = initialamountinaccount.subtract(object.getAmount()); 
+                act.setAmount(updatedact);
+                final String transactionType = environment.getProperty("2222");
+                WrapperTransaction Obj = new WrapperTransaction(object.getCustomerId(),
+                object.getAccountId(), transactionType, object.getAmount());
+                transactionServiceImpl.createTransaction(Obj);
+                accountRepository.saveAndFlush(act);
+            } else {
+                         throw new HandleException(environment.getProperty("303"));
+            }
+
+            // withdrawing into bank
+            final BigDecimal initialamountinbank = bank.getAmount();
+
+            if (initialamountinbank.compareTo(validamount) == 1
+                && object.getAmount().compareTo(initialamountinbank) == -1
+                && object.getAmount().compareTo(validamount) == 1 && object.getAmount().intValue()%2==0) 
+            {
+
+                BigDecimal updatedbank = initialamountinbank.subtract(object.getAmount()); 
+                final WrapperRequestObject bpobject = new WrapperRequestObject();
+                bpobject.setId(object.getBankId());
+                bpobject.setRequestamount(val);
+        
+                //Boolean permmission = bankdenominationServiceImpl.getDenomination(bpobject).getPermission();
+        
+                    /*if (permmission == true) 
+                      {*/
+          
+                          bank.setAmount(updatedbank);
+                          bankServiceImpl.updateBank(bank);
+       
+                          return act;
+        
+                     /*else
+                    {
+                        throw new HandleException(environment.getProperty("701"));
+                    }
+                        */
+            } else {
+                      throw new HandleException(environment.getProperty("304"));
+            }
+        } else {
+                  throw new HandleException(environment.getProperty("305"));
         }
-
-      } else {
-        log.warning("");
-        throw new HandleException(environment.getProperty("304"));
-      }
-    } else {
-      log.warning("");
-      throw new HandleException(environment.getProperty("305"));
     }
-
-    return act;
+    else
+    {
+      throw new HandleException(environment.getProperty("7777"));
+    }
 
   }
 
@@ -268,9 +283,12 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public Account getAccountDetail(final Long Id) throws HandleException {
     log.info(" in  getAccountDetail");
-
-    return accountRepository.findById(Id).get();
-
+    if(Id!=null )
+    {
+      return accountRepository.findById(Id).get();
+    } else {
+      throw new HandleException(environment.getProperty("7777"));
+    }
   }
 
   /**update account table.
@@ -282,18 +300,22 @@ public class AccountServiceImpl implements AccountService {
   public void updateAccount(Account account) throws HandleException {
     log.info(" in  updateAccount");
 
-    Optional op;
-
-    op = accountRepository.findById(account.getAccountId());
-    if (op.isPresent())
+    if(account!=null)
     {
-      account = accountRepository.saveAndFlush(account);
+        Optional op;
 
-    } else {
+        op = accountRepository.findById(account.getAccountId());
+        if (op.isPresent())
+        {
+            account = accountRepository.saveAndFlush(account);
+
+        } else {
     
-      throw new HandleException(environment.getProperty("333"));
+                throw new HandleException(environment.getProperty("333"));
+        }
+    } else {
+              throw new HandleException(environment.getProperty("7777"));
     }
-
   }
 
 }

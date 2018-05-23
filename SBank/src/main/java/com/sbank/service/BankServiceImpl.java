@@ -18,7 +18,7 @@ import com.sbank.controller.BankController;
 import com.sbank.dao.BankRepository;
 import com.sbank.exception.HandleException;
 import com.sbank.model.Bank;
-import com.sbank.model.RefMoney;
+//import com.sbank.model.RefMoney;
 import com.sbank.wrappers.WrapperCreateBank;
 
 /**
@@ -28,37 +28,41 @@ import com.sbank.wrappers.WrapperCreateBank;
 @Service
 public class BankServiceImpl  implements BankService {
 
-  Logger log = Logger.getLogger(BankServiceImpl.class.getName());
+  /**-----------log --------------*/
+  private Logger log = Logger.getLogger(BankServiceImpl.class.getName());
 	
+  /**---------bankrepository object--------.*/
 	@Autowired
-	BankRepository bankrepository;
+	private BankRepository bankrepository;
 
-	
+	/**------------environment object---------------------.*/
 	@Autowired
-	Environment environment;
+	private Environment environment;
 	
 	/**/
 	/* creating bank with amount which is in parameter
 	 * @see com.sbank.service.BankService#createBank(com.sbank.model.Bank)
 	 */
 	@Override
-	public Bank createBank(WrapperCreateBank object) throws HandleException {
+	public Bank createBank(final WrapperCreateBank object) throws HandleException {
 	  
 	log.info("in service createBank");
-	  Bank BankCustomer=null;
-	  BigDecimal restrict = new BigDecimal(1000);
+	  Bank bankCustomer=null;
+	  final BigDecimal restrict = new BigDecimal(1000);
 	  
-	  if(object.getAmount().compareTo(restrict)==-1)     //validating initial amount it can not be -ve
+	  if(object.getAmount()!=null)
 	  {
-	    throw new HandleException(environment.getProperty("101"));
-	  }
-	  else
-	  {
-	    Bank bank = new Bank();
-	    bank.setAmount(object.getAmount());
-	 
-		BankCustomer = bankrepository.save(bank);
-		return BankCustomer;
+	      if(object.getAmount().compareTo(restrict)==-1)     //validating initial amount it can not be -ve
+	      {
+	          throw new HandleException(environment.getProperty("101"));
+	      } else {
+	                Bank bank = new Bank();
+	                bank.setAmount(object.getAmount());
+	                bankCustomer = bankrepository.save(bank);
+	                return bankCustomer;
+	      }
+	  } else {
+	            throw new HandleException(environment.getProperty("101"));
 	  }
 	}
 
@@ -70,34 +74,35 @@ public class BankServiceImpl  implements BankService {
 	public List<Bank> getBankDetails() throws HandleException{
 	  log.info("in service getBankDetails");
 		List<Bank> bankslist = new ArrayList<Bank>();
-
 		bankslist=bankrepository.findAll();
 		if(bankslist.size()==0)
 		{
 		  throw new HandleException(environment.getProperty("100"));
 		}
-
-    return bankslist;
-			
-	
-	}
+		else {return bankslist;}
+}
 
 	/**/
   /* get the bank having particular bankid 
    * @see com.sbank.service.BankService#getBank(java.math.BigDecimal)
    */
   @Override
-  public Bank getBank(Long bankId) throws HandleException {
+  public Bank getBank(final Long bankId) throws HandleException {
     log.info("in service getBank");
-    Optional op;
-    Bank bank=null;
-    op = bankrepository.findById(bankId);
-    
-    if(op.isPresent())
+    if(bankId!=null)
     {
-      bank = bankrepository.findById(bankId).get(); 
-    }
+      Optional op;
+      Bank bank=null;
+      op = bankrepository.findById(bankId);
+    
+      if(op.isPresent())
+      {
+        bank = bankrepository.findById(bankId).get(); 
+      }
     return bank;
+    } else {
+      throw new HandleException(environment.getProperty("7777"));
+    }
   }
 
   /**/
@@ -105,18 +110,22 @@ public class BankServiceImpl  implements BankService {
    * @see com.sbank.service.BankService#updateBank(com.sbank.model.Bank)
    */
   @Override
-  public void updateBank(Bank bank) throws HandleException {
+  public void updateBank(final Bank bank) throws HandleException {
     // TODO Auto-generated method stub
     log.info("in service updateBank");
-    Optional op;
-    op = bankrepository.findById(bank.getBankId());
-    if(op.isPresent())
+    if(bank!=null && bank.getAmount()!=null && bank.getBankId()!=null)
     {
-      bankrepository.saveAndFlush(bank); 
-    }
-    else
-    {
-      throw new HandleException(environment.getProperty("111"));
+      Optional op;
+      op = bankrepository.findById(bank.getBankId());
+      if(op.isPresent())
+      {
+        bankrepository.saveAndFlush(bank); 
+      } else {
+              throw new HandleException(environment.getProperty("111"));
+      }
+    } else {
+      throw new HandleException(environment.getProperty("7777"));
+
     }
   }
 
