@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.sbank.exception.HandleException;
 import com.sbank.model.Customer;
+import com.sbank.wrappers.WrapperUpdateCustomer;
 
 /**
  * @author trainee
@@ -36,4 +37,12 @@ public interface CustomerService {
 	 * @throws HandleException
 	 */
 	Customer getCustomer(Long customerId) throws HandleException;
+	
+	
+	/**
+	 * @param object
+	 * @return
+	 * @throws HandleException
+	 */
+	Customer updateCustomer(WrapperUpdateCustomer object) throws HandleException;
 }

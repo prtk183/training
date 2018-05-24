@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Transaction {
+public class Transaction extends BaseClass{
   
   /**------transactionId----.**/
   @Id

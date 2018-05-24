@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "CUSTOMER")
-public class Customer {
+public class Customer extends BaseClass{
 
  
 /**-------------*/

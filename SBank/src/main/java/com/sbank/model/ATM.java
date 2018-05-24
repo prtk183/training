@@ -14,7 +14,7 @@ import com.sbank.model.Bank;
 
 @Entity
 @Table(name="ATM")
-public class ATM {
+public class ATM extends BaseClass{
   
   /**------------*/
   @Id

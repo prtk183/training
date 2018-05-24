@@ -19,7 +19,7 @@ import net.bytebuddy.implementation.bind.annotation.Empty;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Account {
+public class Account extends BaseClass{
 
   /**------------*/
   @Id

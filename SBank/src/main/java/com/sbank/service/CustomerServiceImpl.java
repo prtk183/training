@@ -16,6 +16,7 @@ import com.sbank.dao.CustomerRepository;
 import com.sbank.exception.HandleException;
 import com.sbank.model.Bank;
 import com.sbank.model.Customer;
+import com.sbank.wrappers.WrapperUpdateCustomer;
 
 
 
@@ -119,6 +120,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
     
    
+  }
+
+
+
+  @Override
+  public Customer updateCustomer(final WrapperUpdateCustomer object) throws HandleException {
+    
+    if(object!=null && object.getCustomerBankId()!=null & object.getCustomerName()!=null)
+    {
+      
+      final Customer customer = customerRepository.findById(object.getId()).get();
+      customer.setBank(bankServiceImpl.getBank(object.getCustomerBankId()));
+      customer.setCustomerName(object.getCustomerName());
+      return customerRepository.save(customer);
+    }
+    else
+    {
+      throw new HandleException(environment.getProperty("7777"));
+    }
   }
 		
 
